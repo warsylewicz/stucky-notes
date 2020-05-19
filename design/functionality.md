@@ -21,15 +21,20 @@ First phase
    * number of times logged in : number
    * last login date/time : date/time
    * role : string
+
+will update as I learn more about JWT
  
  * Note
    * id
    * contents
+   * posX : number
+   * posY : number
    * date created
    * date modified
 
 
 Second Phase
 ------------
+ * change password
  * verify email
  * manage roles
