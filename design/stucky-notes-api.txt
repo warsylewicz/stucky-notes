@@ -1,0 +1,266 @@
+openapi: 3.0.0
+info:
+  description: REST API for Stucky Notes https://app.swaggerhub.com/apis/awarsylewicz/stucky-notes-api/1.0.0
+  version: "1.0.0"
+  title: Stucky Notes
+  contact:
+    email: aaron@warsylewicz.ca
+  license:
+    name: MIT
+    url: 'https://mit-license.org/'
+servers:
+# Added by API Auto Mocking Plugin
+  - description: SwaggerHub API Auto Mocking
+    url: https://virtserver.swaggerhub.com/awarsylewicz/stucky-notes-api/1.0.0
+  - description: Production Server
+    url: 'https://notes.warsylewicz.ca/api'
+tags:
+  - name: note
+    description: Everything about notes
+  - name: user
+    description: Everything about user
+  - name: authentication
+    description: Everything about authentication
+paths:
+  /notes:
+    get:
+      tags:
+        - note
+      summary: Find all notes for logged in user
+      description: Returns all notes for authenticated user
+      responses:
+        '200':
+          description: successful operation
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  notes:
+                    type: array
+                    items:
+                      $ref: '#/components/schemas/Note'
+    post:
+      tags:
+        - note
+      summary: Add a new note
+      requestBody:
+        content:
+          application/json:
+            schema:
+              type: object
+              properties:
+                contents:
+                  type: string
+                posX:
+                  type: integer
+                posY:
+                  type: integer
+              required:
+                - contents
+                - posX
+                - posY
+      responses:
+        '200':
+          description: successful operation
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Note'
+        '405':
+          description: Invalid input
+  '/notes/{noteId}':
+    patch:
+      tags:
+        - note
+      summary: Update an existing note
+      parameters:
+        - name: noteId
+          in: path
+          description: ID of note to update
+          required: true
+          schema:
+            type: integer
+            format: int64
+      responses:
+        '400':
+          description: Invalid ID supplied
+        '404':
+          description: Note not found
+        '405':
+          description: Validation exception
+      requestBody:
+        content:
+          application/json:
+            schema:
+              type: object
+              properties:
+                contents:
+                  type: string
+                posX:
+                  type: integer
+                posY:
+                  type: integer
+      description: Updates the contents or position of the note specified by the noteId.  PATCH used instead of PUT because the action may not be idempotent due to side-effects (e.g. DateModified updated when contents updated).
+    delete:
+      tags:
+        - note
+      summary: Delete an existing note
+      parameters:
+        - name: noteId
+          in: path
+          description: ID of note to update
+          required: true
+          schema:
+            type: integer
+            format: int64
+      responses:
+        '204':
+          description: successfuly operation
+        '400':
+          description: Invalid ID supplied
+        '404':
+          description: Note not found
+  /users:
+    post:
+      tags:
+        - user
+      summary: Create user
+      requestBody:
+        content:
+          application/json:
+            schema:
+              type: object
+              properties:
+                email:
+                  type: string
+                password:
+                  type: string
+              required:
+                - email
+                - password
+      responses:
+        '201':
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/User'
+          description: Created user object
+  /login:
+    post:
+      tags:
+        - authentication
+      summary: Creates a new user session
+      requestBody:
+        content:
+          application/json:
+            schema:
+              type: object
+              properties:
+                email:
+                  type: string
+                password:
+                  type: string
+              required:
+                - email
+                - password
+      responses:
+        '200':
+          description: successful operation
+          headers:
+            X-Rate-Limit:    # todo - how to handle maximum number of calls
+              description: calls per hour allowed by the user
+              schema:
+                type: integer
+                format: int32
+            X-Expires-After:
+              description: date in UTC when token expires
+              schema:
+                type: string
+                format: date-time
+          content:
+            application/json:
+              schema:
+                type: string
+        '400':
+          description: Invalid username/password supplied
+  /logout:
+    post:
+      tags:
+        - authentication
+      summary: Logs out current logged in user session
+      responses:
+        default:
+          description: successful operation
+  '/users/{email}':
+    delete:
+      tags:
+        - user
+      summary: Delete user
+      description: Can only be done by an administrator.
+      operationId: deleteUser
+      parameters:
+        - name: email
+          in: path
+          description: The user account that needs to be deleted
+          required: true
+          schema:
+            type: string
+      responses:
+        '204':
+          description: successful operation
+        '400':
+          description: Invalid email supplied
+        '404':
+          description: User not found
+components:
+  schemas:
+    User:
+      type: object
+      required:
+        - email
+        - password
+        - posX
+        - posY
+        - dateCreated
+        - dateModified
+        - role
+      properties:
+        email:
+          type: string
+          format: email
+        password:
+          type: string
+        posX:
+          type: integer
+        posY:
+          type: integer
+        dateCreated:
+          type: string
+        dateModified:
+          type: string
+        role:
+          type: string
+    Note:
+      type: object
+      required:
+        - content
+      properties:
+        content:
+          type: string
+          example: This is a note.
+  requestBodies:
+    Note:
+      content:
+        application/json:
+          schema:
+            $ref: '#/components/schemas/Note'
+      description: Note object that needs to be added
+      required: true
+    User:
+      content:
+        application/json:
+          schema:
+              $ref: '#/components/schemas/User'
+      description: User object
+      required: true

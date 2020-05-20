@@ -23,4 +23,16 @@ Installed Adobe XD.  Created account at SwaggerHUB for the RESTful API design.  
 
 ---
 
+**Day 3: 2020-05-18**
+
+Learned how to use Adobe XD.  Finished rough prototype.  Defined basic functionality.
+
+---
+
+**Day 4: 2020-05-19**
+
+Watched YouTube video: [Oktane17: Designing Beautiful REST + JSON APIs](https://youtu.be/MiOSzpfP1Ww).  Created RESTful API on SwaggerHUB.
+
+**Day 5: 2020-05-20**
+
 
