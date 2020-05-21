@@ -8,7 +8,8 @@ First phase
  * login
  * logout
  * create account
- * delete account
+ * delete account (admin)
+ * view all users (admin)
  * add note
  * edit note
  * delete note

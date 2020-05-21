@@ -1,17 +1,21 @@
 // database/users.js
 
+"use strict";
+
+
 const { getDatabase } = require('./mongo');
 
 const collectionName = 'users';
 
 async function defineUser() {
     const database = await getDatabase();
-    await database.collection(collectionName).createIndex( { 'email': 1 }, { unique: true });  // equivalent to creating a primary key
+    // email addresses must be unique but are not used as the primary key
+    await database.collection(collectionName).createIndex({ 'email': 1 }, { unique: true });
 }
 
-async function getUser(user) {
+async function getUserByEmail(email) {
     const database = await getDatabase();
-    return await database.collection(collectionName).findOne( { 'email': user.email });
+    return await database.collection(collectionName).findOne({ 'email': email });
 }
 
 async function getUsers() {
@@ -21,22 +25,30 @@ async function getUsers() {
 
 async function insertUser(user) {
     const database = await getDatabase();
-    const insertedUser = await database.collection(collectionName).insertOne(user);
-    // console.log(insertedUser.insertedId); // gets the id
-    // console.log(insertedUser);
-    return insertedUser.insertedId;
+    const { insertedId } = await database.collection(collectionName).insertOne(user);
+    return insertedId;
 }
 
-async function deleteUser(user) {
+async function updateUser(id, user) {
     const database = await getDatabase();
-    const deletedUser = await database.collection(collectionName).deleteOne( { 'email': user.email });
+    delete user._id;
+    const { modifiedCount } = await database.collection(collectionName).updateOne(
+        { _id: new ObjectID(id) },
+        { $set: { ...user }, },
+    );
+}
+
+async function deleteUser(id) {
+    const database = await getDatabase();
+    const deletedUser = await database.collection(collectionName).deleteOne({ _id: new Object(id) });
     return deletedUser.deletedCount;
 }
 
 module.exports = {
     defineUser,
-    getUser,
     getUsers,
+    getUserByEmail,
     insertUser,
+    updateUser,
     deleteUser,
 };
