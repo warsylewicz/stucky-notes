@@ -35,4 +35,6 @@ Watched YouTube video: [Oktane17: Designing Beautiful REST + JSON APIs](https://
 
 **Day 5: 2020-05-20**
 
+Started coding in Node.js.  Watched a few YouTube videos.  Wondered why Node.js is ES5.
+
 
