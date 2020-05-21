@@ -4,6 +4,7 @@
 
 
 const { getDatabase } = require('./mongo');
+const { ObjectID } = require('mongodb');
 
 const collectionName = 'users';
 
@@ -26,7 +27,8 @@ async function getUsers() {
 async function insertUser(user) {
     const database = await getDatabase();
     const { insertedId } = await database.collection(collectionName).insertOne(user);
-    return insertedId;
+    user = getUserByEmail(user.email);
+    return user;
 }
 
 async function updateUser(id, user) {
@@ -40,7 +42,7 @@ async function updateUser(id, user) {
 
 async function deleteUser(id) {
     const database = await getDatabase();
-    const deletedUser = await database.collection(collectionName).deleteOne({ _id: new Object(id) });
+    const deletedUser = await database.collection(collectionName).deleteOne({ _id: new ObjectID(id) });
     return deletedUser.deletedCount;
 }
 

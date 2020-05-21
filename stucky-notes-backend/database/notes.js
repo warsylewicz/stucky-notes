@@ -1,7 +1,7 @@
 // database/notes.js
 "use strict";
 
-const { getDatabase } = require('./mongo');
+const { getDatabase } = require(('../database/mongo'));
 const { ObjectID } = require('mongodb');
 
 const collectionName = 'notes';
@@ -11,10 +11,16 @@ async function getNotes() {
     return await database.collection(collectionName).find({}).toArray();
 }
 
+async function getNote(id) {
+    const database = await getDatabase();
+    return await database.collection(collectionName).findOne({ _id: new ObjectID(id) });
+}
+
 async function insertNote(note) {
     const database = await getDatabase();
     const { insertedId } = await database.collection(collectionName).insertOne(note);
-    return insertedId;
+    note = getNote(insertedId);
+    return note;
 }
 
 async function updateNote(id, note) {
@@ -35,6 +41,7 @@ async function deleteNote(id) {
 
 module.exports = {
     getNotes,
+    getNote,
     insertNote,
     updateNote,
     deleteNote,
