@@ -38,6 +38,7 @@ app.get('/api/users', async (req, res) => {
 // add a new user
 app.post('/api/users', async (req, res) => {
     let newUser = req.body;
+    newUser.role = "";
     newUser = await insertUser(newUser);
     res.send(newUser);
 });
