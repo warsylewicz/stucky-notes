@@ -1,26 +1,40 @@
+// followed structure found in this tutorial: https://bezkoder.com/node-js-mongodb-auth-jwt/
+
+
 // ./config/server.js
 "use strict";
 
 // import the dependencies
-const express = require('express');
-const bodyParser = require('body-parser');
-const cors = require('cors');
-const helmet = require('helmet');
-const morgan = require('morgan');
+const express = require("express");
+const bodyParser = require("body-parser");
+const cors = require("cors");
+const helmet = require("helmet");
+const morgan = require("morgan");
 
-require('dotenv').config();
+require("dotenv").config();
 
 // database dependencies
-const { startDatabase } = require('./database/mongo');
-const { defineUser, getUsers, insertUser, deleteUser } = require('./database/users');
-const { defineNote, getNotes, insertNote, updateNote, deleteNote } = require('./database/notes');
+const { startDatabase } = require("./database/mongo");
+const {
+  defineUser,
+  getUsers,
+  insertUser,
+  deleteUser,
+} = require("./database/users");
+const {
+  defineNote,
+  getNotes,
+  insertNote,
+  updateNote,
+  deleteNote,
+} = require("./database/notes");
 
 // defining the Express app
 const app = express();
 
 // enable CORS
 let corsOptions = {
-    origin: "http://localhost:8080"
+  origin: "http://localhost:8080",
 };
 app.use(cors(corsOptions));
 
@@ -29,24 +43,27 @@ app.use(cors(corsOptions));
 app.use(helmet());
 
 // parse requests of content-type - application/x-www-form-urlencoded
-app.use(bodyParser.urlencoded( { extended: true } ));
+app.use(bodyParser.json());
 
 // add morgan to log HTTP requests
-app.use(morgan('combined'));
+app.use(morgan("combined"));
 
 const db = require("./models");
 const Role = db.role;
 
 db.mongoose
-  .connect(`mongodb://${process.env.HOST}:${process.env.PORT}/${process.env.DB}`, {
-    useNewUrlParser: true,
-    useUnifiedTopology: true
-  })
+  .connect(
+    `mongodb://${process.env.DB_HOST}:${process.env.DB_PORT}/${process.env.DB_NAME}`,
+    {
+      useNewUrlParser: true,
+      useUnifiedTopology: true,
+    }
+  )
   .then(() => {
     console.log("Successfully connect to MongoDB.");
     initial();
   })
-  .catch(err => {
+  .catch((err) => {
     console.error("Connection error", err);
     process.exit();
   });
@@ -55,8 +72,8 @@ function initial() {
   Role.estimatedDocumentCount((err, count) => {
     if (!err && count === 0) {
       new Role({
-        name: "user"
-      }).save(err => {
+        name: "user",
+      }).save((err) => {
         if (err) {
           console.log("error", err);
         }
@@ -65,8 +82,8 @@ function initial() {
       });
 
       new Role({
-        name: "admin"
-      }).save(err => {
+        name: "admin",
+      }).save((err) => {
         if (err) {
           console.log("error", err);
         }
@@ -77,14 +94,9 @@ function initial() {
   });
 }
 
-
-
 // routes
-require('./routes/auth.routes')(app);
-require('./routes/user.routes')(app);
-
-
-
+require("./routes/auth.routes")(app);
+require("./routes/user.routes")(app);
 
 /*
 
@@ -157,8 +169,7 @@ app.post('/app/logout', async (req, res) => {
 
 */
 
-
 const port = process.env.PORT || 3000;
 app.listen(port, () => {
-    console.log(`listening on port ${port}`);
+  console.log(`listening on port ${port}`);
 });
