@@ -79,13 +79,14 @@ function initial() {
 
 
 
+// routes
+require('./routes/auth.routes')(app);
+require('./routes/user.routes')(app);
 
 
 
 
-
-
-
+/*
 
 
 
@@ -154,16 +155,10 @@ app.post('/app/logout', async (req, res) => {
     res.status(200).end();
 })
 
-// start the in-memory MondoDB instance
-startDatabase().then(async () => {
-    await defineUser(); // can't define user here due to how require works.  can't have two files requiring each other.
-    await defineNote(); 
-    const newUser = await insertUser({ email: 'admin@warsylewicz.ca', password: 'password', role: 'admin' });
-    const newNote = await insertNote({ owner: "admin@warsylewicz.ca", posX: 0, posY: 0, dateCreated: Date(), dateModified: Date() });
-    await updateNote(newNote._id, { contents: "foo2", posX: 1, posY: 2, dateModified: Date() });
+*/
 
-    const port = process.env.PORT || 3000;
-    app.listen(port, () => {
+
+const port = process.env.PORT || 3000;
+app.listen(port, () => {
     console.log(`listening on port ${port}`);
-  });
 });
