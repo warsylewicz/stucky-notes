@@ -33,13 +33,23 @@ Learned how to use Adobe XD.  Finished rough prototype.  Defined basic functiona
 
 Watched YouTube video: [Oktane17: Designing Beautiful REST + JSON APIs](https://youtu.be/MiOSzpfP1Ww).  Created RESTful API on SwaggerHUB.
 
+---
+
 **Day 5: 2020-05-20**
 
 Started coding in Node.js.  Watched a few YouTube videos.  Wondered why Node.js is ES5.  Finished MongoDB CRUD.
 
+---
+
 **Day 6: 2020-05-21**
 
 Completed REST API for /api/users.
+
+---
+
+**Day 7: 2020-05-22**
+
+Rewrote back-end completely using a better architecture.  Improved separation between controllers, middleware, models, and routes.  Got JWT working for the first time!
 
 
 
