@@ -11,7 +11,7 @@ const morgan = require('morgan');
 // database dependencies
 const { startDatabase } = require('./database/mongo');
 const { defineUser, getUsers, insertUser, deleteUser } = require('./database/users');
-const { getNotes, insertNote, updateNote, deleteNote } = require('./database/notes');
+const { defineNote, getNotes, insertNote, updateNote, deleteNote } = require('./database/notes');
 
 // defining the Express app
 const app = express();
@@ -92,6 +92,7 @@ app.post('/app/logout', async (req, res) => {
 // start the in-memory MondoDB instance
 startDatabase().then(async () => {
     await defineUser(); // can't define user here due to how require works.  can't have two files requiring each other.
+    await defineNote(); 
     const newUser = await insertUser({ email: 'admin@warsylewicz.ca', password: 'password', role: 'admin' });
     const newNote = await insertNote({ owner: "admin@warsylewicz.ca", posX: 0, posY: 0, dateCreated: Date(), dateModified: Date() });
     await updateNote(newNote._id, { contents: "foo2", posX: 1, posY: 2, dateModified: Date() });

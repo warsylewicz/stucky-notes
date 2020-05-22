@@ -9,6 +9,7 @@ const collectionName = 'users';
 
 async function defineUser() {
     const database = await getDatabase();
+    await database.collection(collectionName).drop();
     // email addresses must be unique but are not used as the primary key
     await database.collection(collectionName).createIndex({ email: 1 }, { unique: true });
 }
@@ -17,7 +18,7 @@ async function getUserByEmail(email) {
     const database = await getDatabase();
     return await database.collection(collectionName).findOne(
         { email: email },
-        { projection: { password: 0, _id: 0 }, },
+        { projection: { password: false, _id: false }, },
     );
 }
 
@@ -25,7 +26,7 @@ async function getUsers() {
     const database = await getDatabase();
     const users = await database.collection(collectionName).find(
         {},
-        { projection: { password: 0 }, },
+        { projection: { password: false }, },
     ).toArray();
     return users;
 }

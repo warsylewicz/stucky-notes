@@ -39,7 +39,9 @@ Started coding in Node.js.  Watched a few YouTube videos.  Wondered why Node.js 
 
 **Day 6: 2020-05-21**
 
-REST API.
+Completed REST API for /api/users.
+
+
 
 
 

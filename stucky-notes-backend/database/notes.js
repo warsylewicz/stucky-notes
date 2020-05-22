@@ -6,6 +6,11 @@ const { ObjectID } = require('mongodb');
 
 const collectionName = 'notes';
 
+async function defineNote() {
+    const database = await getDatabase();
+    await database.collection(collectionName).drop();
+}
+
 async function getNotes() {
     const database = await getDatabase();
     return await database.collection(collectionName).find({}).toArray();
@@ -40,6 +45,7 @@ async function deleteNote(id) {
 }
 
 module.exports = {
+    defineNote,
     getNotes,
     getNote,
     insertNote,
