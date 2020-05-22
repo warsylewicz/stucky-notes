@@ -7,8 +7,8 @@ const bodyParser = require('body-parser');
 const cors = require('cors');
 const helmet = require('helmet');
 const morgan = require('morgan');
+
 require('dotenv').config();
-const dbConfig = require("./config/db.config");
 
 // database dependencies
 const { startDatabase } = require('./database/mongo');
@@ -38,7 +38,7 @@ const db = require("./models");
 const Role = db.role;
 
 db.mongoose
-  .connect(`mongodb://${dbConfig.HOST}:${dbConfig.PORT}/${dbConfig.DB}`, {
+  .connect(`mongodb://${process.env.HOST}:${process.env.PORT}/${process.env.DB}`, {
     useNewUrlParser: true,
     useUnifiedTopology: true
   })
@@ -62,16 +62,6 @@ function initial() {
         }
 
         console.log("added 'user' to roles collection");
-      });
-
-      new Role({
-        name: "moderator"
-      }).save(err => {
-        if (err) {
-          console.log("error", err);
-        }
-
-        console.log("added 'moderator' to roles collection");
       });
 
       new Role({

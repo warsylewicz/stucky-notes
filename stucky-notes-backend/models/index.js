@@ -1,5 +1,6 @@
 const mongoose = require('mongoose');
-mongoose.Promise = global.Promise;
+
+// mongoose.Promise = global.Promise;  // not needed in mongoose 5
 
 const db = {};
 
