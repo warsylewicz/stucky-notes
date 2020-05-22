@@ -7,6 +7,8 @@ const bodyParser = require('body-parser');
 const cors = require('cors');
 const helmet = require('helmet');
 const morgan = require('morgan');
+require('dotenv').config();
+const dbConfig = require("./config/db.config");
 
 // database dependencies
 const { startDatabase } = require('./database/mongo');
@@ -16,18 +18,86 @@ const { defineNote, getNotes, insertNote, updateNote, deleteNote } = require('./
 // defining the Express app
 const app = express();
 
+// enable CORS
+let corsOptions = {
+    origin: "http://localhost:8080"
+};
+app.use(cors(corsOptions));
+
 // add middleware to app
 // add Helmet to enhance security
 app.use(helmet());
 
-// bodyParser to parse JSON bodies into JS objects
-app.use(bodyParser.json());
-
-// enable CORS
-app.use(cors());
+// parse requests of content-type - application/x-www-form-urlencoded
+app.use(bodyParser.urlencoded( { extended: true } ));
 
 // add morgan to log HTTP requests
 app.use(morgan('combined'));
+
+const db = require("./models");
+const Role = db.role;
+
+db.mongoose
+  .connect(`mongodb://${dbConfig.HOST}:${dbConfig.PORT}/${dbConfig.DB}`, {
+    useNewUrlParser: true,
+    useUnifiedTopology: true
+  })
+  .then(() => {
+    console.log("Successfully connect to MongoDB.");
+    initial();
+  })
+  .catch(err => {
+    console.error("Connection error", err);
+    process.exit();
+  });
+
+function initial() {
+  Role.estimatedDocumentCount((err, count) => {
+    if (!err && count === 0) {
+      new Role({
+        name: "user"
+      }).save(err => {
+        if (err) {
+          console.log("error", err);
+        }
+
+        console.log("added 'user' to roles collection");
+      });
+
+      new Role({
+        name: "moderator"
+      }).save(err => {
+        if (err) {
+          console.log("error", err);
+        }
+
+        console.log("added 'moderator' to roles collection");
+      });
+
+      new Role({
+        name: "admin"
+      }).save(err => {
+        if (err) {
+          console.log("error", err);
+        }
+
+        console.log("added 'admin' to roles collection");
+      });
+    }
+  });
+}
+
+
+
+
+
+
+
+
+
+
+
+
 
 //define endpoints according to https://app.swaggerhub.com/apis/awarsylewicz/stucky-notes-api/1.0.0
 // find all users - only for admin
@@ -83,6 +153,11 @@ app.post('/app/login', async (req, res) => {
     res.status(200).end();
 });
 
+app.post('/app/register', async (req, res) => {
+    // todo
+    res.status(200).end();
+})
+
 // logout
 app.post('/app/logout', async (req, res) => {
     // todo
@@ -97,7 +172,8 @@ startDatabase().then(async () => {
     const newNote = await insertNote({ owner: "admin@warsylewicz.ca", posX: 0, posY: 0, dateCreated: Date(), dateModified: Date() });
     await updateNote(newNote._id, { contents: "foo2", posX: 1, posY: 2, dateModified: Date() });
 
-    app.listen(3000, () => {
-    console.log('listening on port 3000');
+    const port = process.env.PORT || 3000;
+    app.listen(port, () => {
+    console.log(`listening on port ${port}`);
   });
 });
