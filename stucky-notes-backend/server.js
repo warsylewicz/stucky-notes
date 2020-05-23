@@ -1,6 +1,5 @@
 // followed structure found in this tutorial: https://bezkoder.com/node-js-mongodb-auth-jwt/
 
-
 // ./config/server.js
 "use strict";
 
@@ -10,6 +9,7 @@ const bodyParser = require("body-parser");
 const cors = require("cors");
 const helmet = require("helmet");
 const morgan = require("morgan");
+const bcrypt = require("bcrypt");
 
 require("dotenv").config();
 
@@ -50,6 +50,7 @@ app.use(morgan("combined"));
 
 const db = require("./models");
 const Role = db.role;
+const User = db.user;
 
 db.mongoose
   .connect(
@@ -91,83 +92,48 @@ function initial() {
         console.log("added 'admin' to roles collection");
       });
     }
+
+    // add the admin
+    Role.findOne({ name: "admin" }, (err, role) => {
+      if (err) {
+        console.log("error", err);
+        return;
+      }
+
+      // does the admin already exist?
+      // TODO: convert to mongoose upsert
+      User.findOne({ role: role._id }, (err, admin) => {
+        if (err) {
+          console.log("error", err);
+          return;
+        }
+
+        if (admin) {
+          return;
+        }
+
+        admin = new User({
+          email: process.env.ADMIN_EMAIL,
+          password: bcrypt.hashSync(process.env.ADMIN_PASSWORD, 12),
+          loggedInCount: 0,
+          lastLogin: Date(),
+          role: role._id,
+        });
+
+        admin.save((err) => {
+          if (err) {
+            console.log("error", err);
+          }
+        });
+      });
+    });
   });
 }
 
 // routes
 require("./routes/auth.routes")(app);
 require("./routes/user.routes")(app);
-
-/*
-
-
-
-//define endpoints according to https://app.swaggerhub.com/apis/awarsylewicz/stucky-notes-api/1.0.0
-// find all users - only for admin
-app.get('/api/users', async (req, res) => {
-    res.send(await getUsers());
-});
-
-// add a new user
-app.post('/api/users', async (req, res) => {
-    let newUser = req.body;
-    newUser.role = "";
-    newUser = await insertUser(newUser);
-    res.send(newUser);
-});
-
-// delete a user
-app.delete('/api/users/:id', async (req, res) => {
-    const deletedCount = await deleteUser(req.params.id);
-    res.status(200).end();
-});
-
-// Notes
-// get all notes
-app.get('/api/notes', async (req, res) => {
-    const notes = await getNotes();
-    res.send(notes);
-});
-
-// create a new note
-app.post('/api/notes', async (req, res) => {
-    let newNote = req.body;
-    newNote = await insertNote(newNote);
-    res.send(newNote);
-});
-
-// update note - contents changed or it moved
-app.patch('/api/notes/:noteId', async (req, res) => {
-    let note = req.body;
-    note = await updateNote(req.params.noteId, note);
-    res.send(note);
-});
-
-// delete note
-app.delete('/api/notes/:noteId', async (req, res) => {
-    const deletedCount = await deleteNote(req.params,noteId);
-    res.status(200).end();
-});
-
-// authentication
-// login
-app.post('/app/login', async (req, res) => {
-    // todo
-    res.status(200).end();
-});
-
-app.post('/app/register', async (req, res) => {
-    // todo
-    res.status(200).end();
-})
-
-// logout
-app.post('/app/logout', async (req, res) => {
-    // todo
-    res.status(200).end();
-})
-
-*/
+require("./routes/note.routes")(app);
 
 const port = process.env.PORT || 3000;
 app.listen(port, () => {

@@ -28,7 +28,12 @@ isAdmin = (req, res, next) => {
       return;
     }
 
-    Role.find({ _id: { $in: user.roles } }, (err, role) => {
+    if (!user) {
+      res.status(404).send({ message: "No user found" });
+      return;
+    }
+
+    Role.find({ _id: user.role }, (err, role) => {
       if (err) {
         res.status(500).send({ message: err });
         return;

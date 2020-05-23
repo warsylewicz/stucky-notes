@@ -3,7 +3,7 @@ const mongoose = require("mongoose");
 const Note = mongoose.model(
   "Note",
   new mongoose.Schema({
-    _id: Number,
+    _id: String,
     contents: String,
     posX: Number,
     posY: Number,
