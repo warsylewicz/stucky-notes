@@ -29,7 +29,7 @@ module.exports = function (app) {
   )
 
   app.delete(
-    "/api/user/:noteId",
+    "/api/notes/:noteId",
     [authJwt.verifyToken],
     noteController.delete
   );

@@ -16,14 +16,8 @@ module.exports = function (app) {
     userController.findAll
   );
 
-  app.post(
-    "/api/users",
-    [authJwt.verifyToken, authJwt.isAdmin],
-    userController.create
-  );
-
   app.delete(
-    "/api/user/:id",
+    "/api/users/:email",
     [authJwt.verifyToken, authJwt.isAdmin],
     userController.delete
   );

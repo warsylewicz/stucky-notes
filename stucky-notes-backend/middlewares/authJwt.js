@@ -33,7 +33,7 @@ isAdmin = (req, res, next) => {
       return;
     }
 
-    Role.find({ _id: user.role }, (err, role) => {
+    Role.findOne({ _id: user.role._id }, (err, role) => {
       if (err) {
         res.status(500).send({ message: err });
         return;

@@ -43,30 +43,39 @@ exports.update = (req, res) => {
 
   let updateForNote = {
     contents: req.body.contents,
-    posX: req.body.posX,    
+    posX: req.body.posX,
     posY: req.body.posY,
     modified: Date(),
   };
 
-  Note.findOneAndUpdate({ owner: userId, _id: noteId }, updateForNote, { new: true, useFindAndModify: false }, (err, savedNote) => {
-    if (err) {
-      res.status(500).send({ message: err });
-      return;
-    }
+  Note.findOneAndUpdate(
+    { owner: userId, _id: noteId },
+    updateForNote,
+    { new: true, useFindAndModify: false },
+    (err, savedNote) => {
+      if (err) {
+        res.status(500).send({ message: err });
+        return;
+      }
+      if (!savedNote) {
+        res.status(404).send({ message: "Note not found." });
+        return;
+      }
       res.send(savedNote);
-  });
+    }
+  );
 };
 
 exports.delete = (req, res) => {
   const userId = req.userId;
   const noteId = req.params.noteId;
 
-  Note.findOneAndDelete( { owner: userId, _id: noteId }, (err) => {
-    if (err) {
+  Note.findOneAndDelete({ owner: userId, _id: noteId }, (err, note) => {
+    if (err || !note) {
       res.status(404).send({ message: err });
       return;
     }
 
-    res.status(200).end();
-  })
+    res.status(200).send();
+  });
 };
