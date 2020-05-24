@@ -3,6 +3,7 @@ const noteController = require("../controllers/note.controller");
 
 module.exports = function (app) {
   app.use(function (req, res, next) {
+    console.log("note route");
     res.header(
       "Access-Control-Allow-Headers",
       "x-access-token, Origin, Content-Type, Accept"

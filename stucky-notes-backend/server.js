@@ -1,6 +1,5 @@
 // followed structure found in this tutorial: https://bezkoder.com/node-js-mongodb-auth-jwt/
 
-// ./config/server.js
 "use strict";
 
 // import the dependencies
@@ -10,26 +9,9 @@ const cors = require("cors");
 const helmet = require("helmet");
 const morgan = require("morgan");
 const bcrypt = require("bcrypt");
-
 require("dotenv").config();
 
-// database dependencies
-const { startDatabase } = require("./database/mongo");
-const {
-  defineUser,
-  getUsers,
-  insertUser,
-  deleteUser,
-} = require("./database/users");
-const {
-  defineNote,
-  getNotes,
-  insertNote,
-  updateNote,
-  deleteNote,
-} = require("./database/notes");
-
-// defining the Express app
+// define the Express app
 const app = express();
 
 // enable CORS
@@ -38,7 +20,6 @@ let corsOptions = {
 };
 app.use(cors(corsOptions));
 
-// add middleware to app
 // add Helmet to enhance security
 app.use(helmet());
 

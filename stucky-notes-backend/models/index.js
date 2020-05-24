@@ -1,4 +1,5 @@
 const mongoose = require("mongoose");
+mongoose.Promise = Promise;  // use ES6 promises
 
 const db = {};
 

@@ -39,3 +39,8 @@ Second Phase
  * change password
  * verify email
  * manage roles
+ 
+ 
+scroll canvas with notes, pinch zoom functionality
+annimated intro and placing notes.  POP ... POP ... pop pop pop pop
+

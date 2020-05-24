@@ -18,7 +18,7 @@ module.exports = function (app) {
 
   app.delete(
     "/api/users/:email",
-    [authJwt.verifyToken, authJwt.isAdmin],
+    [authJwt.verifyToken, authJwt.isAdmin], // love this design, great abstraction
     userController.delete
   );
 };
