@@ -51,7 +51,18 @@ Completed REST API for /api/users.
 
 Rewrote back-end completely using a better architecture.  Improved separation between controllers, middleware, models, and routes.  Got JWT working for the first time!
 
+---
 
+**Day 8: 2020-05-23**
+Watched a number of YouTube videos on the state of npm and Node.  Interested to see the development of Deno.  Did some back-end code clean up.
+
+---
+
+**Day 9: 2020-05-24**
+
+Started working on some JavaScript problems on Codewars.  Started React front-end.  Back-end needs more work, but will get to that later.
+
+---
 
 
 
