@@ -18,7 +18,7 @@ class Auth extends Component {
     super(props);
     this.state = {
       signIn: true,
-      signUp: false
+      signUp: false,
     };
   }
 
@@ -27,28 +27,28 @@ class Auth extends Component {
 
     return (
       <Container maxWidth="sm">
-          <Slide
-            direction="right"
-            in={this.state.signIn}
-            onExited={() => this.setState( { signUp: true })}
-            mountOnEnter
-            unmountOnExit
-          >
-            <Paper elevation={4} className={classes.paper}>
-              <SignInForm doSwitch={() => this.setState( { signIn: false })} />
-            </Paper>
-          </Slide>
-          <Slide
-            direction="left"
-            in={this.state.signUp}
-            onExited={() => this.setState( { signIn: true })}
-            mountOnEnter
-            unmountOnExit
-          >
-            <Paper elevation={4} className={classes.paper}>
-              <SignUpForm doSwitch={() => this.setState( { signUp: false })} />
-            </Paper>
-          </Slide>
+        <Slide
+          direction="right"
+          in={this.state.signIn}
+          onExited={() => this.setState({ signUp: true })}
+          mountOnEnter
+          unmountOnExit
+        >
+          <Paper elevation={4} className={classes.paper}>
+            <SignInForm doSwitch={() => this.setState({ signIn: false })} />
+          </Paper>
+        </Slide>
+        <Slide
+          direction="left"
+          in={this.state.signUp}
+          onExited={() => this.setState({ signIn: true })}
+          mountOnEnter
+          unmountOnExit
+        >
+          <Paper elevation={4} className={classes.paper}>
+            <SignUpForm doSwitch={() => this.setState({ signUp: false })} />
+          </Paper>
+        </Slide>
       </Container>
     );
   }
