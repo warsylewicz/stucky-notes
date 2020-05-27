@@ -5,7 +5,6 @@ import {
   BrowserRouter as Router,
   Switch,
   Route,
-  Link
 } from "react-router-dom";
 
 function App() {
@@ -13,15 +12,10 @@ function App() {
     <Router>
       <div className="App">
       <Switch>
-        <Route path="/home">
-          <p>hi</p>
-        </Route>
         <Route path="/">
           <Auth />
         </Route>
       </Switch>
-      
-        
       </div>
     </Router>
   );

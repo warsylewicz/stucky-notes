@@ -1,6 +1,6 @@
 // https://github.com/mui-org/material-ui/blob/master/docs/src/pages/getting-started/templates/sign-up/SignUp.js
 
-import React, { Component } from "react";
+import React from "react";
 import Avatar from "@material-ui/core/Avatar";
 import Button from "@material-ui/core/Button";
 import CssBaseline from "@material-ui/core/CssBaseline";
@@ -10,24 +10,11 @@ import Grid from "@material-ui/core/Grid";
 import Box from "@material-ui/core/Box";
 import LockOutlinedIcon from "@material-ui/icons/LockOutlined";
 import Typography from "@material-ui/core/Typography";
-import { withStyles } from "@material-ui/core/styles";
+import { makeStyles } from "@material-ui/core/styles";
 import Container from "@material-ui/core/Container";
+import Copyright from "../Copyright";
 
-
-function Copyright() {
-  return (
-    <Typography variant="body2" color="textSecondary" align="center">
-      {"Copyright © "}
-      <Link color="inherit" href="https://warsylewicz.ca">
-        Aaron Warsylewicz
-      </Link>{" "}
-      {new Date().getFullYear()}
-      {"."}
-    </Typography>
-  );
-}
-
-const styles = (theme) => ({
+const useStyles = makeStyles((theme) => ({
   paper: {
     marginTop: theme.spacing(8),
     display: "flex",
@@ -45,21 +32,11 @@ const styles = (theme) => ({
   submit: {
     margin: theme.spacing(3, 0, 2),
   },
-});
+}));
 
-class SignUpForm extends Component {
-  constructor(props) {
-    super(props);
-    this.signUp = this.signUp.bind(this);
-    this.state = {};
-  }
+function SignUpForm(props) {
+  const classes = useStyles();
 
-  signUp() {
-    
-  }
-
-  render() {
-    const { classes } = this.props;
     return (
       <Container component="main" maxWidth="xs">
         <CssBaseline />
@@ -114,11 +91,10 @@ class SignUpForm extends Component {
               variant="contained"
               color="primary"
               className={classes.submit}
-              onClick={this.signUp}
             >
               Sign Up
             </Button>
-            <Link href="#" variant="body2" onClick={this.props.doSwitch}>
+            <Link href="#" variant="body2" onClick={props.doSwitch}>
               {"Already have an account? Sign in"}
             </Link>
           </form>
@@ -129,6 +105,6 @@ class SignUpForm extends Component {
       </Container>
     );
   }
-}
 
-export default withStyles(styles)(SignUpForm);
+
+export default SignUpForm;
