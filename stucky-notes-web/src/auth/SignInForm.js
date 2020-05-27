@@ -44,14 +44,16 @@ function SignInForm(props) {
     e.preventDefault();
     //alert(process.env.REACT_APP_API_URL);
     try {
-      let response = await axios.post(process.env.REACT_APP_API_URL + "/api/auth/signin", {
-        email: email,
-        password: password,
-      });
-      alert(response.data);
-      alert(response.data.id)
+      let response = await axios.post(
+        process.env.REACT_APP_API_URL + "/api/auth/signin",
+        {
+          email: email,
+          password: password,
+        }
+      );
+      localStorage.setItem("token", response.data.accessToken);
     } catch (err) {
-      alert(err);
+      console.log(err);
     }
   }
 
