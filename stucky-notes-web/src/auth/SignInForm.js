@@ -1,6 +1,6 @@
 // https://github.com/mui-org/material-ui/blob/master/docs/src/pages/getting-started/templates/sign-in/SignIn.js
 
-import React from "react";
+import React, { useState } from "react";
 import Avatar from "@material-ui/core/Avatar";
 import Button from "@material-ui/core/Button";
 import CssBaseline from "@material-ui/core/CssBaseline";
@@ -12,7 +12,7 @@ import Typography from "@material-ui/core/Typography";
 import { makeStyles } from "@material-ui/core/styles";
 import Container from "@material-ui/core/Container";
 import Copyright from "../Copyright";
-const axios = require('axios').default;
+const axios = require("axios").default;
 
 const useStyles = makeStyles((theme) => ({
   paper: {
@@ -34,13 +34,26 @@ const useStyles = makeStyles((theme) => ({
   },
 }));
 
-function doSignIn() {
-  // axios.post()
-
-}
-
 function SignInForm(props) {
+  const [email, setEmail] = useState("");
+  const [password, setPassword] = useState("");
+
   const classes = useStyles();
+
+  async function handleSubmit(e) {
+    e.preventDefault();
+    //alert(process.env.REACT_APP_API_URL);
+    try {
+      let response = await axios.post(process.env.REACT_APP_API_URL + "/api/auth/signin", {
+        email: email,
+        password: password,
+      });
+      alert(response.data);
+      alert(response.data.id)
+    } catch (err) {
+      alert(err);
+    }
+  }
 
   return (
     <Container component="main" maxWidth="xs">
@@ -52,8 +65,13 @@ function SignInForm(props) {
         <Typography component="h1" variant="h5">
           Sign in
         </Typography>
-        <form className={classes.form} noValidate>
+        <form
+          className={classes.form}
+          //noValidate
+          onSubmit={handleSubmit}
+        >
           <TextField
+            type="email"
             variant="outlined"
             margin="normal"
             required
@@ -63,6 +81,8 @@ function SignInForm(props) {
             name="email"
             autoComplete="email"
             autoFocus
+            value={email}
+            onChange={(e) => setEmail(e.target.value)}
           />
           <TextField
             variant="outlined"
@@ -74,14 +94,15 @@ function SignInForm(props) {
             type="password"
             id="password"
             autoComplete="current-password"
+            value={password}
+            onChange={(e) => setPassword(e.target.value)}
           />
           <Button
-            // type="submit"
+            type="submit"
             fullWidth
             variant="contained"
             color="primary"
             className={classes.submit}
-            onClick={doSignIn}
           >
             Sign In
           </Button>
