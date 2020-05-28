@@ -70,4 +70,13 @@ Added React-router.
 
 ---
 
+**Day 11: 2020-05-26**
+
+Converted all React classes to functions using Hooks.  Got sign in working.
+
+---
+
+**Day 12: 2020-05-27**
+
+Working on the title by introducing a React component called "Note".  The Note component should be reuseable for the actual notes the user would edit.
 

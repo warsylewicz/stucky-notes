@@ -4,6 +4,7 @@ import Paper from "@material-ui/core/Paper";
 import Slide from "@material-ui/core/Slide";
 import { makeStyles } from "@material-ui/core/styles";
 
+import Title from "../Title";
 import SignInForm from "./SignInForm";
 import SignUpForm from "./SignUpForm";
 
@@ -20,6 +21,7 @@ function Auth() {
 
   return (
     <Container maxWidth="sm">
+      <Title />
       <Slide
         direction="right"
         in={signIn}
