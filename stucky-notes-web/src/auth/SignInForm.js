@@ -16,7 +16,6 @@ const axios = require("axios").default;
 
 const useStyles = makeStyles((theme) => ({
   paper: {
-    marginTop: theme.spacing(8),
     display: "flex",
     flexDirection: "column",
     alignItems: "center",
@@ -70,7 +69,7 @@ function SignInForm(props) {
         </Typography>
         <form
           className={classes.form}
-          //noValidate
+          noValidate
           onSubmit={handleSubmit}
         >
           <TextField

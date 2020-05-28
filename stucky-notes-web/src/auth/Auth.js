@@ -4,7 +4,7 @@ import Paper from "@material-ui/core/Paper";
 import Slide from "@material-ui/core/Slide";
 import { makeStyles } from "@material-ui/core/styles";
 
-import Title from "../Title";
+import Title from "./Title";
 import SignInForm from "./SignInForm";
 import SignUpForm from "./SignUpForm";
 
@@ -23,13 +23,14 @@ function Auth() {
     <Container maxWidth="sm">
       <Title />
       <Slide
+        style={{transform: "rotate(40deg)"}}
         direction="right"
         in={signIn}
         onExited={() => setSignUp(true)}
         mountOnEnter
         unmountOnExit
       >
-        <Paper elevation={4} className={classes.paper}>
+        <Paper elevation={4} className={classes.paper} >
           <SignInForm doSwitch={() => setSignIn(false) } />
         </Paper>
       </Slide>

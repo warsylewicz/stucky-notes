@@ -5,11 +5,13 @@ import { makeStyles } from "@material-ui/core/styles";
 
 const useStyles = makeStyles((theme) => ({
     paper: {
-        width: "10vw",
-        height: "10vw",
-        fontSize: "10vw",
-        
-        transform: "rotate(" + parseInt(Math.random()*20-10) + "deg)",
+        marginTop: theme.spacing(4),
+        width: "100%",
+        height: "90%",
+        fontSize: "300%",
+        paddingTop: "20%",
+        fontFamily: "papyrus",
+        cursor: "default",
     },
     noteColor1: { backgroundColor: "#E1CEC9", },
     noteColor2: { backgroundColor: "#EBE6E5", },
@@ -26,6 +28,7 @@ function Note(props) {
                 elevation={3}
                 square={true}
                 className={[classes.paper, classes["noteColor" + props.color] ]}
+                style={{transform: "rotate(" + (props.color - 3) * 4 + "deg)"}}
                 >
                 {props.contents}
             </Paper>
