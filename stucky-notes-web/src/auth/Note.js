@@ -7,18 +7,13 @@ const useStyles = makeStyles((theme) => ({
     paper: {
         marginTop: theme.spacing(4),
         width: "100%",
-        height: "90%",
+        height: "80%",
         fontSize: "300%",
         paddingTop: "20%",
         fontFamily: "papyrus",
         cursor: "default",
+        backgroundColor: theme.palette.secondary.light,
     },
-    noteColor1: { backgroundColor: "#E1CEC9", },
-    noteColor2: { backgroundColor: "#EBE6E5", },
-    noteColor3: { backgroundColor: "#DFD8DC", },
-    noteColor4: { backgroundColor: "#D2C1CE", },
-    noteColor5: { backgroundColor: "#B4BAD4", },
-    noteColor6: { backgroundColor: "#D4CFBD", },
 }));
 
 function Note(props) {
@@ -27,7 +22,7 @@ function Note(props) {
             <Paper
                 elevation={3}
                 square={true}
-                className={[classes.paper, classes["noteColor" + props.color] ]}
+                className={classes.paper}
                 style={{transform: "rotate(" + (props.color - 3) * 4 + "deg)"}}
                 >
                 {props.contents}

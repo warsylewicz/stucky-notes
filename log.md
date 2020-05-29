@@ -80,3 +80,15 @@ Converted all React classes to functions using Hooks.  Got sign in working.
 
 Working on the title by introducing a React component called "Note".  The Note component should be reuseable for the actual notes the user would edit.
 
+**Day 13: 2020-05-28**
+
+Figured out prototypal inheritance.
+https://zeekat.nl/articles/constructors-considered-mildly-confusing.html
+
+function MyConstructor() { }
+let myobj = new MyConstructor();
+MyConstructor.prototype.constructor === MyConstructor // true
+MyConstructor.__proto__.constructor === MyConstructor // false
+myobj.__proto__.constructor === MyConstructor // true
+
+

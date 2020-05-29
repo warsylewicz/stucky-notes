@@ -14,11 +14,12 @@ const useStyles = makeStyles((theme) => ({
   }
 }));
 
-function Auth() {
+function Auth(props) {
   const [signIn, setSignIn] = useState(true);
   const [signUp, setSignUp] = useState(false);
   const classes = useStyles();
-
+  console.log(props.theme);
+  
   return (
     <Container maxWidth="sm">
       <Title />
@@ -30,7 +31,7 @@ function Auth() {
         mountOnEnter
         unmountOnExit
       >
-        <Paper elevation={4} className={classes.paper} >
+        <Paper elevation={4} className={classes.paper} theme={props.theme} >
           <SignInForm doSwitch={() => setSignIn(false) } />
         </Paper>
       </Slide>
