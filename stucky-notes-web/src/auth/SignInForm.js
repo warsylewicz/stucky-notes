@@ -1,6 +1,7 @@
 // https://github.com/mui-org/material-ui/blob/master/docs/src/pages/getting-started/templates/sign-in/SignIn.js
 
 import React, { useState } from "react";
+import { Redirect } from "react-router-dom";
 import Avatar from "@material-ui/core/Avatar";
 import Button from "@material-ui/core/Button";
 import CssBaseline from "@material-ui/core/CssBaseline";
@@ -13,6 +14,7 @@ import { makeStyles } from "@material-ui/core/styles";
 import Container from "@material-ui/core/Container";
 import Copyright from "../Copyright";
 const axios = require("axios").default;
+
 
 const useStyles = makeStyles((theme) => ({
   paper: {
@@ -51,7 +53,10 @@ function SignInForm(props) {
         }
       );
       localStorage.setItem("token", response.data.accessToken);
-      // go to 
+      localStorage.setItem("email", response.data.email);
+      return (
+        <Redirect to={{ pathname: "/notes", state: {email: email }}} />
+      );
     } catch (err) {
       console.log(err);
     }

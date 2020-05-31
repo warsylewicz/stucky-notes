@@ -80,6 +80,8 @@ Converted all React classes to functions using Hooks.  Got sign in working.
 
 Working on the title by introducing a React component called "Note".  The Note component should be reuseable for the actual notes the user would edit.
 
+---
+
 **Day 13: 2020-05-28**
 
 Figured out prototypal inheritance.
@@ -91,5 +93,17 @@ MyConstructor.prototype.constructor === MyConstructor // true
 MyConstructor.__proto__.constructor === MyConstructor // false
 myobj.__proto__.constructor === MyConstructor // true
 
+---
 
+**Day 14: 2020-05-29**
+
+UI Improvements.
+
+---
+
+**Day 15: 2020-05-30**
+
+UI updates.  Looked into doing animations with Framer-Motion library for React.
+
+---
 

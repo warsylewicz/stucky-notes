@@ -72,3 +72,18 @@ exports.signin = (req, res) => {
       });
     });
 };
+
+exports.getUser = (req, res) => {
+  User.findOne({ _id: req.userId })
+    .populate("role", "-__v").exec( (err, user) => {
+    if (err) {
+      res.status(500).send({ message: err });
+      return;
+    }
+
+    res.send( {
+      email: user.email,
+      role: user.role.name,
+    });
+  });
+};

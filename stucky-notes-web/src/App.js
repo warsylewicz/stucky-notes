@@ -1,8 +1,17 @@
 import React from "react";
 import "./App.css";
 import Auth from "./auth/Auth";
-import { BrowserRouter as Router, Switch, Route } from "react-router-dom";
+import { Redirect } from "react-router-dom";
 import { MuiThemeProvider, createMuiTheme } from "@material-ui/core/styles";
+const axios = require("axios").default;
+
+(function() {
+  const token = localStorage.getItem("token");
+  if (token)
+      axios.defaults.headers.common['x-access-token'] = token;
+  else
+      axios.defaults.headers.common['x-access-token'] = null;
+})();
 
 const theme = createMuiTheme(
   {
@@ -24,7 +33,7 @@ const theme = createMuiTheme(
   "Paper Theme"
 );
 
-function App() {
+export default function App() {
   return (
     <MuiThemeProvider theme={theme}>
       <div className="App">
@@ -33,5 +42,3 @@ function App() {
     </MuiThemeProvider>
   );
 }
-
-export default App;
