@@ -23,7 +23,7 @@ function Note(props) {
                 elevation={3}
                 square={true}
                 className={classes.paper}
-                style={{transform: "rotate(" + (props.color - 3) * 4 + "deg)"}}
+                style={{transform: "rotate(" + (props.contents.charCodeAt(0) % 25 - 12) + "deg)"}}
                 >
                 {props.contents}
             </Paper>

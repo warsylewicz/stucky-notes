@@ -1,15 +1,29 @@
 import React from "react";
 import Note from "./Note";
 import Grid from "@material-ui/core/Grid";
+import { motion } from "framer-motion";
 
 function Title() {
   return (
     <Grid container spacing={1}>
       <Grid item xs={2}>
-        <Note contents="S" color={1} />
+        <motion.div
+            style={{ width: "100%", height: "100%" }}
+            animate={{ rotate: 360 }}
+            transition={{ duration: 2 }}
+            >
+          <Note contents="S" color={1} />  
+        </motion.div>
+        
       </Grid>
       <Grid item xs={2}>
+      <motion.div
+            animate={{ rotate: -360 }}
+            transition={{ duration: 2 }}
+            >
+
         <Note contents="t" color={2} />
+        </motion.div>
       </Grid>
       <Grid item xs={2}>
         <Note contents="u" color={3} />

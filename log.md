@@ -92,3 +92,4 @@ MyConstructor.__proto__.constructor === MyConstructor // false
 myobj.__proto__.constructor === MyConstructor // true
 
 
+
