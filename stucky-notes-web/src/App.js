@@ -1,17 +1,12 @@
 import React from "react";
 import "./App.css";
 import Auth from "./auth/Auth";
-import { Redirect } from "react-router-dom";
-import { MuiThemeProvider, createMuiTheme } from "@material-ui/core/styles";
-const axios = require("axios").default;
+import Notes from "./notes/Notes";
+import Admin from "./admin/Admin";
 
-(function() {
-  const token = localStorage.getItem("token");
-  if (token)
-      axios.defaults.headers.common['x-access-token'] = token;
-  else
-      axios.defaults.headers.common['x-access-token'] = null;
-})();
+import { MuiThemeProvider, createMuiTheme } from "@material-ui/core/styles";
+import { AnimatePresence } from "framer-motion";
+import { BrowserRouter, Route, Switch } from "react-router-dom";
 
 const theme = createMuiTheme(
   {
@@ -37,7 +32,15 @@ export default function App() {
   return (
     <MuiThemeProvider theme={theme}>
       <div className="App">
-        <Auth />
+        <BrowserRouter>
+          <AnimatePresence>
+            <Switch location={window.location} key={window.location.pathname}>
+              <Route path="/notes" component={Notes} />
+              <Route path="/admin" component={Admin} />
+              <Route path="/" component={Auth} />
+            </Switch>
+          </AnimatePresence>
+        </BrowserRouter>
       </div>
     </MuiThemeProvider>
   );

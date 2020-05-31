@@ -103,7 +103,9 @@ UI Improvements.
 
 **Day 15: 2020-05-30**
 
-UI updates.  Looked into doing animations with Framer-Motion library for React.
+UI updates.  Looked into doing animations with Framer-Motion library for React.  Added new API route for checking if the user is currently logged in.
 
 ---
+
+**Day 16: 2020-05-31**
 
