@@ -5,10 +5,12 @@ import { makeStyles } from "@material-ui/core/styles";
 const useStyles = makeStyles((theme) => ({
   paper: {
     marginTop: theme.spacing(4),
-    width: "100%",
-    height: "80%",
-    fontSize: "300%",
+    width: "calc(15px + 75%)",
+    height: "calc(15px + 75%)",
+    fontSize: "calc(30px + 30%)",
+    margin: "0",
     paddingTop: "20%",
+    paddingBottom: "0%",
     fontFamily: "papyrus",
     cursor: "default",
     backgroundColor: theme.palette.secondary.light,

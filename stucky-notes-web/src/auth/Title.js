@@ -4,7 +4,7 @@ import Grid from "@material-ui/core/Grid";
 
 function Title() {
   return (
-    <Grid container spacing={1}>
+    <Grid container spacing={0}>
       <Grid item xs={2}>
         <TitleLetter contents="S" />
       </Grid>

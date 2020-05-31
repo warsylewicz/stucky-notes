@@ -11,12 +11,11 @@ const axios = require("axios").default;
 })();
 
 function logout() {
-    localStorage.setItem("token", null);
+  localStorage.setItem("token", null);
 }
 
 export default function Admin(props) {
     
-
 
   return (
     <Paper elevation={4}>
