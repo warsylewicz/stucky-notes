@@ -1,4 +1,5 @@
-import React, { useState } from "react";
+import React from "react";
+import { Redirect } from "react-router-dom";
 import { Container, Paper } from "@material-ui/core";
 import { makeStyles } from "@material-ui/core/styles";
 import Title from "./Title";
@@ -11,9 +12,11 @@ const useStyles = makeStyles((theme) => ({
 }));
 
 export default function SignUp(props) {
-  const [user, setUser] = useState({});
-
   const classes = useStyles();
+
+  const token = localStorage.getItem("token");
+  if (token !== null)
+    return <Redirect to="/notes" />;
 
   return (
     <Container maxWidth="sm">

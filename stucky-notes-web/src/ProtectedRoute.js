@@ -1,12 +1,10 @@
 import React from 'react';
-import { Route } from 'react-router-dom';
+import { Route } from "react-tiger-transition";
 
-const ProtectedRoute = ({ component: Component, ...rest }) => {
+export const ProtectedRoute = ({ component: Component, ...rest }) => {
   return (
     <Route {...rest} render={
       props => <Component {...rest} {...props} />
     } />
   )
 }
-
-export default ProtectedRoute;

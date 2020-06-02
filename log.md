@@ -113,3 +113,7 @@ Add routing and page transitions.
 
 ---
 
+**Day 17: 2020-06-01**
+
+Replaced framer-motion with react-tiger-transition.  Implemented better page routing.
+

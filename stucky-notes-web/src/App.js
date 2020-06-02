@@ -1,15 +1,14 @@
 import React from "react";
 import { MuiThemeProvider, createMuiTheme } from "@material-ui/core/styles";
-
+import { ProtectedRoute } from "./ProtectedRoute";
+import { BrowserRouter as Router } from "react-router-dom";
+import { Navigation, Route, Redirect, pushPull, scale } from "react-tiger-transition";
+import "react-tiger-transition/styles/main.min.css";
 import "./App.css";
 import SignIn from "./auth/SignIn";
 import SignUp from "./auth/SignUp";
 import Notes from "./notes/Notes";
 import Admin from "./admin/Admin";
-// import { ProtectedRoute } from "./ProtectedRoute";
-import { BrowserRouter as Router } from "react-router-dom";
-import { Navigation, Route, Link, glide, glueIn, pushPull } from "react-tiger-transition";
-import "react-tiger-transition/styles/main.min.css";
 
 const theme = createMuiTheme(
   {
@@ -38,25 +37,33 @@ pushPull({
   name: "pushPull-right",
   direction: "right",
 });
+scale({
+  name: "scale",
+});
 
 export default function App() {
   return (
     <Router>
-      <Navigation>
-        <Route exact screen path="/admin">
+      <Navigation
+        defaultRoute={<Redirect to='/' />}
+        globalTransitionProps={{
+        timeout: 600,
+        classNames: 'scale'
+   }}>
+        <ProtectedRoute exact screen path="/admin">
           <MuiThemeProvider theme={theme}>
             <div className="App">
               <Admin />
             </div>
           </MuiThemeProvider>
-        </Route>
-        <Route exact screen path="/notes">
+        </ProtectedRoute>
+        <ProtectedRoute exact screen path="/notes">
           <MuiThemeProvider theme={theme}>
             <div className="App">
               <Notes />
             </div>
           </MuiThemeProvider>
-        </Route>
+        </ProtectedRoute>
         <Route exact screen path="/signup">
           <MuiThemeProvider theme={theme}>
             <div className="App">

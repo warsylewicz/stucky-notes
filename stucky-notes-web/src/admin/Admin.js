@@ -11,7 +11,7 @@ const axios = require("axios").default;
 })();
 
 function logout() {
-  localStorage.setItem("token", null);
+  localStorage.removeItem("token");
 }
 
 export default function Admin(props) {

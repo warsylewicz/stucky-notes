@@ -1,4 +1,5 @@
 import React from "react";
+import { Link } from "react-tiger-transition";
 import Paper from "@material-ui/core/Paper";
 
 const axios = require("axios").default;
@@ -15,7 +16,7 @@ function Notes(props) {
   return (
     <Paper elevation={4}>
       Notes page
-      
+      <Link to="/" transition="scale">Login</Link>
     </Paper>
   );
 }

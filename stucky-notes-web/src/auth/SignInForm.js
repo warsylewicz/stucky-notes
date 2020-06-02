@@ -13,7 +13,7 @@ import {
 import { Alert } from "@material-ui/lab";
 import LockOutlinedIcon from "@material-ui/icons/LockOutlined";
 import { makeStyles } from "@material-ui/core/styles";
-import { Link, glide } from "react-tiger-transition";
+import { Link } from "react-tiger-transition";
 import Copyright from "./Copyright";
 const axios = require("axios").default;
 
@@ -36,15 +36,12 @@ const useStyles = makeStyles((theme) => ({
   },
 }));
 
-glide({
-  name: "glide-left"
-});
 
 export default function SignInForm(props) {
   const [email, setEmail] = useState("");
   const [password, setPassword] = useState("");
   const [invalidLogin, setInvalidLogin] = useState(false);
-  const [validLogin, setValidLogin] = useState(false);
+  const [validLogin, setValidLogin] = useState(null);
 
   const classes = useStyles();
 
@@ -61,7 +58,7 @@ export default function SignInForm(props) {
       if (response.data.accessToken !== null) {
         localStorage.setItem("token", response.data.accessToken);
         localStorage.setItem("email", response.data.email);
-        setValidLogin(true);
+        setValidLogin(response.data.role);
       } else {
         throw new Error('Invalid Login');
       }
@@ -75,9 +72,14 @@ export default function SignInForm(props) {
     setInvalidLogin(false);
   };
 
-  if (validLogin) {
+  if (validLogin === "admin") {
     return (
-      <Redirect to={{ pathname: "/notes", state: { email: email } }} />
+      <Redirect to="/admin" />
+    );
+  }
+  if (validLogin === "user") {
+    return (
+      <Redirect to="/notes" />
     );
   }
 
