@@ -1,20 +1,21 @@
-// https://github.com/mui-org/material-ui/blob/master/docs/src/pages/getting-started/templates/sign-in/SignIn.js
-
 import React, { useState } from "react";
 import { Redirect } from "react-router-dom";
-import Avatar from "@material-ui/core/Avatar";
-import Button from "@material-ui/core/Button";
-import CssBaseline from "@material-ui/core/CssBaseline";
-import TextField from "@material-ui/core/TextField";
-import Link from "@material-ui/core/Link";
-import Box from "@material-ui/core/Box";
+import {
+  Avatar,
+  Box,
+  Button,
+  Container,
+  CssBaseline,
+  Snackbar,
+  TextField,
+  Typography,
+} from "@material-ui/core";
+import { Alert } from "@material-ui/lab";
 import LockOutlinedIcon from "@material-ui/icons/LockOutlined";
-import Typography from "@material-ui/core/Typography";
 import { makeStyles } from "@material-ui/core/styles";
-import Container from "@material-ui/core/Container";
-import Copyright from "../Copyright";
+import { Link, glide } from "react-tiger-transition";
+import Copyright from "./Copyright";
 const axios = require("axios").default;
-
 
 const useStyles = makeStyles((theme) => ({
   paper: {
@@ -35,15 +36,20 @@ const useStyles = makeStyles((theme) => ({
   },
 }));
 
-function SignInForm(props) {
+glide({
+  name: "glide-left"
+});
+
+export default function SignInForm(props) {
   const [email, setEmail] = useState("");
   const [password, setPassword] = useState("");
+  const [invalidLogin, setInvalidLogin] = useState(false);
+  const [validLogin, setValidLogin] = useState(false);
 
   const classes = useStyles();
 
   async function handleSubmit(e) {
     e.preventDefault();
-    
     try {
       let response = await axios.post(
         process.env.REACT_APP_API_URL + "/api/auth/signin",
@@ -52,14 +58,27 @@ function SignInForm(props) {
           password: password,
         }
       );
-      localStorage.setItem("token", response.data.accessToken);
-      localStorage.setItem("email", response.data.email);
-      return (
-        <Redirect to={{ pathname: "/notes", state: {email: email }}} />
-      );
-    } catch (err) {
-      console.log(err);
+      if (response.data.accessToken !== null) {
+        localStorage.setItem("token", response.data.accessToken);
+        localStorage.setItem("email", response.data.email);
+        setValidLogin(true);
+      } else {
+        throw new Error('Invalid Login');
+      }
+    } catch (e) {
+      console.log(e);
+      setInvalidLogin(true);
     }
+  }
+
+  const handleClose = (event, reason) => {
+    setInvalidLogin(false);
+  };
+
+  if (validLogin) {
+    return (
+      <Redirect to={{ pathname: "/notes", state: { email: email } }} />
+    );
   }
 
   return (
@@ -72,11 +91,7 @@ function SignInForm(props) {
         <Typography component="h1" variant="h5">
           Sign in
         </Typography>
-        <form
-          className={classes.form}
-          noValidate
-          onSubmit={handleSubmit}
-        >
+        <form className={classes.form} noValidate onSubmit={handleSubmit}>
           <TextField
             type="email"
             variant="outlined"
@@ -114,16 +129,20 @@ function SignInForm(props) {
             Sign In
           </Button>
 
-          <Link href="#" variant="body2" onClick={props.doSwitch}>
+          <Link to="/signup" variant="body2" transition="pushPull-left">
             {"Don't have an account? Sign Up"}
           </Link>
         </form>
       </div>
+      <Snackbar open={invalidLogin} autoHideDuration={6000} onClose={handleClose}>
+        <Alert onClose={handleClose} severity="warning">
+          Invalid login.  Please try again or create an account.
+        </Alert>
+      </Snackbar>
+
       <Box mt={8}>
         <Copyright />
       </Box>
     </Container>
   );
 }
-
-export default SignInForm;

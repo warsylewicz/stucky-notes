@@ -1,12 +1,15 @@
 import React from "react";
+import { MuiThemeProvider, createMuiTheme } from "@material-ui/core/styles";
+
 import "./App.css";
-import Auth from "./auth/Auth";
+import SignIn from "./auth/SignIn";
+import SignUp from "./auth/SignUp";
 import Notes from "./notes/Notes";
 import Admin from "./admin/Admin";
-
-import { MuiThemeProvider, createMuiTheme } from "@material-ui/core/styles";
-import { AnimatePresence } from "framer-motion";
-import { BrowserRouter, Route, Switch } from "react-router-dom";
+// import { ProtectedRoute } from "./ProtectedRoute";
+import { BrowserRouter as Router } from "react-router-dom";
+import { Navigation, Route, Link, glide, glueIn, pushPull } from "react-tiger-transition";
+import "react-tiger-transition/styles/main.min.css";
 
 const theme = createMuiTheme(
   {
@@ -27,21 +30,48 @@ const theme = createMuiTheme(
   },
   "Paper Theme"
 );
+// inject glide styles
+pushPull({
+  name: "pushPull-left",
+});
+pushPull({
+  name: "pushPull-right",
+  direction: "right",
+});
 
 export default function App() {
   return (
-    <MuiThemeProvider theme={theme}>
-      <div className="App">
-        <BrowserRouter>
-          <AnimatePresence>
-            <Switch location={window.location} key={window.location.pathname}>
-              <Route path="/notes" component={Notes} />
-              <Route path="/admin" component={Admin} />
-              <Route path="/" component={Auth} />
-            </Switch>
-          </AnimatePresence>
-        </BrowserRouter>
-      </div>
-    </MuiThemeProvider>
+    <Router>
+      <Navigation>
+        <Route exact screen path="/admin">
+          <MuiThemeProvider theme={theme}>
+            <div className="App">
+              <Admin />
+            </div>
+          </MuiThemeProvider>
+        </Route>
+        <Route exact screen path="/notes">
+          <MuiThemeProvider theme={theme}>
+            <div className="App">
+              <Notes />
+            </div>
+          </MuiThemeProvider>
+        </Route>
+        <Route exact screen path="/signup">
+          <MuiThemeProvider theme={theme}>
+            <div className="App">
+              <SignUp />
+            </div>
+          </MuiThemeProvider>
+        </Route>
+        <Route exact screen path="/">
+          <MuiThemeProvider theme={theme}>
+            <div className="App">
+              <SignIn />
+            </div>
+          </MuiThemeProvider>
+        </Route>
+      </Navigation>
+    </Router>
   );
 }

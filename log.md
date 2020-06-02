@@ -109,3 +109,7 @@ UI updates.  Looked into doing animations with Framer-Motion library for React. 
 
 **Day 16: 2020-05-31**
 
+Add routing and page transitions.
+
+---
+

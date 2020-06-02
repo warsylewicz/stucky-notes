@@ -1,8 +1,8 @@
 import React from "react";
+import { Grid } from "@material-ui/core";
 import TitleLetter from "./TitleLetter";
-import Grid from "@material-ui/core/Grid";
 
-function Title() {
+export default function Title() {
   return (
     <Grid container spacing={0}>
       <Grid item xs={2}>
@@ -43,5 +43,3 @@ function Title() {
     </Grid>
   );
 }
-
-export default Title;
