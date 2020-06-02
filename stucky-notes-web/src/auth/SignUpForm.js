@@ -1,4 +1,4 @@
-import React from "react";
+import React, { useState } from "react";
 import {
   Avatar,
   Box,
@@ -6,13 +6,17 @@ import {
   Container,
   CssBaseline,
   Grid,
+  Snackbar,
   TextField,
   Typography,
 } from "@material-ui/core";
+import { Alert } from "@material-ui/lab";
 import { Link } from "react-tiger-transition";
+import { Redirect } from "react-router-dom";
 import LockOutlinedIcon from "@material-ui/icons/LockOutlined";
 import { makeStyles } from "@material-ui/core/styles";
 import Copyright from "./Copyright";
+const axios = require("axios").default;
 
 const useStyles = makeStyles((theme) => ({
   paper: {
@@ -36,6 +40,49 @@ const useStyles = makeStyles((theme) => ({
 
 function SignUpForm() {
   const classes = useStyles();
+  const [email, setEmail] = useState("");
+  const [password, setPassword] = useState("");
+  const [validSignUp, setValidSignUp] = useState(0);
+  const [invalidSignUp, setInvalidSignUp] = useState(false);
+
+  async function handleSubmit(e) {
+    e.preventDefault();
+    try {
+      let response = await axios.post(
+        process.env.REACT_APP_API_URL + "/api/auth/signup",
+        {
+          email: email,
+          password: password,
+        }
+      );
+      console.log(response);
+      if (response.data.accessToken !== null) {
+        localStorage.setItem("token", response.data.accessToken);
+        localStorage.setItem("email", response.data.email);
+        setValidSignUp(1);
+      } else {
+        throw new Error('Invalid Login');
+      }
+    } catch (e) {
+      console.log(e);
+      setInvalidSignUp(true);
+    }
+  }
+
+  const handleClose = (event, reason) => {
+    setInvalidSignUp(false);
+  };
+
+  const handleCloseValidSignUp = (event, reason) => {
+    setValidSignUp(2);
+  };
+
+  if (validSignUp === 2) {
+    return (
+      <Redirect to="/notes" />
+    );
+  }
+
 
   return (
     <Container component="main" maxWidth="xs">
@@ -47,20 +94,8 @@ function SignUpForm() {
         <Typography component="h1" variant="h5">
           Sign up
         </Typography>
-        <form className={classes.form} noValidate>
+        <form className={classes.form} onSubmit={handleSubmit}>
           <Grid container spacing={2}>
-            <Grid item xs={12}>
-              <TextField
-                autoComplete="name"
-                name="Name"
-                variant="outlined"
-                required
-                fullWidth
-                id="name"
-                label="Name"
-                autoFocus
-              />
-            </Grid>
             <Grid item xs={12}>
               <TextField
                 variant="outlined"
@@ -69,7 +104,9 @@ function SignUpForm() {
                 id="email"
                 label="Email Address"
                 name="email"
+                value={email}
                 autoComplete="email"
+                onChange={(e) => setEmail(e.target.value)}
               />
             </Grid>
             <Grid item xs={12}>
@@ -81,7 +118,9 @@ function SignUpForm() {
                 label="Password"
                 type="password"
                 id="password"
+                value={password}
                 autoComplete="current-password"
+                onChange={(e) => setPassword(e.target.value)}
               />
             </Grid>
           </Grid>
@@ -99,6 +138,18 @@ function SignUpForm() {
           </Link>
         </form>
       </div>
+      <Snackbar open={invalidSignUp} autoHideDuration={6000} onClose={handleClose}>
+        <Alert onClose={handleClose} severity="warning">
+          Email already exists.  Please try again with a different email.
+        </Alert>
+      </Snackbar>
+      <Snackbar open={validSignUp} autoHideDuration={500} onClose={handleCloseValidSignUp}>
+        <Alert onClose={handleCloseValidSignUp} severity="success">
+          Successfully created your account.  Signing you in...
+        </Alert>
+      </Snackbar>
+
+
       <Box mt={5}>
         <Copyright />
       </Box>

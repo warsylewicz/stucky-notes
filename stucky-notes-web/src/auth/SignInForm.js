@@ -40,8 +40,8 @@ const useStyles = makeStyles((theme) => ({
 export default function SignInForm(props) {
   const [email, setEmail] = useState("");
   const [password, setPassword] = useState("");
-  const [invalidLogin, setInvalidLogin] = useState(false);
-  const [validLogin, setValidLogin] = useState(null);
+  const [invalidSignIn, setInvalidSignIn] = useState(false);
+  const [validSignIn, setValidSignIn] = useState(null);
 
   const classes = useStyles();
 
@@ -58,26 +58,26 @@ export default function SignInForm(props) {
       if (response.data.accessToken !== null) {
         localStorage.setItem("token", response.data.accessToken);
         localStorage.setItem("email", response.data.email);
-        setValidLogin(response.data.role);
+        setValidSignIn(response.data.role);
       } else {
-        throw new Error('Invalid Login');
+        throw new Error('Invalid Sign In');
       }
     } catch (e) {
       console.log(e);
-      setInvalidLogin(true);
+      setInvalidSignIn(true);
     }
   }
 
   const handleClose = (event, reason) => {
-    setInvalidLogin(false);
+    setInvalidSignIn(false);
   };
 
-  if (validLogin === "admin") {
+  if (validSignIn === "admin") {
     return (
       <Redirect to="/admin" />
     );
   }
-  if (validLogin === "user") {
+  if (validSignIn === "user") {
     return (
       <Redirect to="/notes" />
     );
@@ -136,9 +136,9 @@ export default function SignInForm(props) {
           </Link>
         </form>
       </div>
-      <Snackbar open={invalidLogin} autoHideDuration={6000} onClose={handleClose}>
+      <Snackbar open={invalidSignIn} autoHideDuration={6000} onClose={handleClose}>
         <Alert onClose={handleClose} severity="warning">
-          Invalid login.  Please try again or create an account.
+          Invalid email or password.  Please try again or create an account.
         </Alert>
       </Snackbar>
 

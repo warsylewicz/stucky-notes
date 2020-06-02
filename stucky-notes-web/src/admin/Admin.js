@@ -1,4 +1,5 @@
-import React from "react";
+import React, { useState } from "react";
+import { Redirect } from "react-router-dom";
 import Paper from "@material-ui/core/Paper";
 import Button from "@material-ui/core/Button";
 
@@ -10,17 +11,22 @@ const axios = require("axios").default;
   else axios.defaults.headers.common["x-access-token"] = null;
 })();
 
-function logout() {
-  localStorage.removeItem("token");
-}
-
 export default function Admin(props) {
-    
+    const[signedOut, setSignedOut] = useState(false);
+
+    const signOut = function() {
+      localStorage.removeItem("token");
+      setSignedOut(true);
+    }
+
+    if (signedOut) {
+      return <Redirect to="/" />
+    }
 
   return (
     <Paper elevation={4}>
       Admin page
-      <Button onClick={logout}>Logout</Button>
+      <Button onClick={signOut}>Sign Out</Button>
     </Paper>
   );
 }
