@@ -1,15 +1,22 @@
 const db = require("../models");
 const User = db.user;
-const Note = db.note;
+const Role = db.role;
 
 exports.findAll = (req, res) => {
-  User.find({}, (err, users) => {
+  Role.findOne({ name: "user" }, (err, role) => {
     if (err) {
       res.status(500).send({ message: err });
       return;
     }
 
-    res.send(users);
+    User.find({ role: role.id }, (err, users) => {
+      if (err) {
+        res.status(500).send({ message: err });
+        return;
+      }
+
+      res.send(users);
+    });
   });
 };
 

@@ -105,6 +105,7 @@ function SignUpForm(props) {
                 id="email"
                 label="Email Address"
                 name="email"
+                type="email"
                 value={email}
                 autoComplete="email"
                 onChange={(e) => setEmail(e.target.value)}
