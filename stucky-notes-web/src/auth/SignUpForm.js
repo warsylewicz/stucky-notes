@@ -38,7 +38,7 @@ const useStyles = makeStyles((theme) => ({
   },
 }));
 
-function SignUpForm() {
+function SignUpForm(props) {
   const classes = useStyles();
   const [email, setEmail] = useState("");
   const [password, setPassword] = useState("");
@@ -59,6 +59,8 @@ function SignUpForm() {
       if (response.data.accessToken !== null) {
         localStorage.setItem("token", response.data.accessToken);
         localStorage.setItem("email", response.data.email);
+        localStorage.setItem("role", response.data.role);
+        props.handleSignIn(response.data.role);
         setValidSignUp(1);
       } else {
         throw new Error('Invalid Login');
@@ -82,7 +84,6 @@ function SignUpForm() {
       <Redirect to="/notes" />
     );
   }
-
 
   return (
     <Container component="main" maxWidth="xs">
@@ -143,7 +144,7 @@ function SignUpForm() {
           Email already exists.  Please try again with a different email.
         </Alert>
       </Snackbar>
-      <Snackbar open={validSignUp} autoHideDuration={500} onClose={handleCloseValidSignUp}>
+      <Snackbar open={validSignUp === 1} autoHideDuration={1000} onClose={handleCloseValidSignUp}>
         <Alert onClose={handleCloseValidSignUp} severity="success">
           Successfully created your account.  Signing you in...
         </Alert>

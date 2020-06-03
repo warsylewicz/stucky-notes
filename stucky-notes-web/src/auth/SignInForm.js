@@ -1,5 +1,4 @@
 import React, { useState } from "react";
-import { Redirect } from "react-router-dom";
 import {
   Avatar,
   Box,
@@ -10,6 +9,7 @@ import {
   TextField,
   Typography,
 } from "@material-ui/core";
+import { Redirect } from "react-router-dom";
 import { Alert } from "@material-ui/lab";
 import LockOutlinedIcon from "@material-ui/icons/LockOutlined";
 import { makeStyles } from "@material-ui/core/styles";
@@ -41,7 +41,7 @@ export default function SignInForm(props) {
   const [email, setEmail] = useState("");
   const [password, setPassword] = useState("");
   const [invalidSignIn, setInvalidSignIn] = useState(false);
-  const [validSignIn, setValidSignIn] = useState(null);
+  const [validSignIn, setValidSignIn] = useState(localStorage.getItem("role"));
 
   const classes = useStyles();
 
@@ -58,6 +58,8 @@ export default function SignInForm(props) {
       if (response.data.accessToken !== null) {
         localStorage.setItem("token", response.data.accessToken);
         localStorage.setItem("email", response.data.email);
+        localStorage.setItem("role", response.data.role);
+        props.handleSignIn(response.data.role);
         setValidSignIn(response.data.role);
       } else {
         throw new Error('Invalid Sign In');
@@ -72,16 +74,18 @@ export default function SignInForm(props) {
     setInvalidSignIn(false);
   };
 
-  if (validSignIn === "admin") {
-    return (
-      <Redirect to="/admin" />
-    );
-  }
   if (validSignIn === "user") {
     return (
       <Redirect to="/notes" />
     );
   }
+
+  if (validSignIn === "admin") {
+    return (
+      <Redirect to="/admin" />
+    );
+  }
+
 
   return (
     <Container component="main" maxWidth="xs">
@@ -141,7 +145,6 @@ export default function SignInForm(props) {
           Invalid email or password.  Please try again or create an account.
         </Alert>
       </Snackbar>
-
       <Box mt={8}>
         <Copyright />
       </Box>

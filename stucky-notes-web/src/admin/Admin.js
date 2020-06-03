@@ -12,16 +12,12 @@ const axios = require("axios").default;
 })();
 
 export default function Admin(props) {
-    const[signedOut, setSignedOut] = useState(false);
+    //const[signedOut, setSignedOut] = useState(false);
 
     const signOut = function() {
-      localStorage.removeItem("token");
-      setSignedOut(true);
+      props.handleSignOut();
     }
 
-    if (signedOut) {
-      return <Redirect to="/" />
-    }
 
   return (
     <Paper elevation={4}>

@@ -1,13 +1,6 @@
-import React from "react";
+import React, { useState } from "react";
 import { MuiThemeProvider, createMuiTheme } from "@material-ui/core/styles";
-import { ProtectedRoute } from "./ProtectedRoute";
-import { BrowserRouter as Router, Redirect } from "react-router-dom";
-import {
-  Navigation,
-  Route,
-  pushPull,
-  scale,
-} from "react-tiger-transition";
+import { Navigation, Route, pushPull, scale } from "react-tiger-transition";
 import "react-tiger-transition/styles/main.min.css";
 import "./App.css";
 import SignIn from "./auth/SignIn";
@@ -46,45 +39,56 @@ scale({
   name: "scale",
 });
 
-export default function App() {
+export default function App(props) {
+  const [role, setRole] = useState(localStorage.getItem("role"));
+
+  function handleSignIn(newRole) {
+    setRole(newRole);
+  }
+
+  function handleSignOut() {
+    localStorage.removeItem("token");
+    localStorage.removeItem("email");
+    localStorage.removeItem("role");
+    setRole("");
+  }
+
   return (
-    <Router>
-      <Navigation
-        defaultRoute={<Redirect to="/" />}
-        globalTransitionProps={{
-          timeout: 600,
-          classNames: "scale",
-        }}
-      >
-        <ProtectedRoute exact screen path="/admin">
-          <MuiThemeProvider theme={theme}>
-            <div className="App">
-              <Admin />
-            </div>
-          </MuiThemeProvider>
-        </ProtectedRoute>
-        <ProtectedRoute exact screen path="/notes">
-          <MuiThemeProvider theme={theme}>
-            <div className="App">
-              <Notes />
-            </div>
-          </MuiThemeProvider>
-        </ProtectedRoute>
-        <Route exact screen path="/signup">
-          <MuiThemeProvider theme={theme}>
-            <div className="App">
-              <SignUp />
-            </div>
-          </MuiThemeProvider>
-        </Route>
-        <Route exact screen path="/">
-          <MuiThemeProvider theme={theme}>
-            <div className="App">
-              <SignIn />
-            </div>
-          </MuiThemeProvider>
-        </Route>
-      </Navigation>
-    </Router>
+    <Navigation
+      globalTransitionProps={{
+        ...props,
+        timeout: 600,
+        classNames: "scale",
+      }}
+    >
+      <Route exact screen path="/notes" skip={role !== "user"}>
+        <MuiThemeProvider theme={theme}>
+          <div className="App">
+            <Notes handleSignOut={handleSignOut} />
+          </div>
+        </MuiThemeProvider>
+      </Route>
+      <Route exact screen path="/admin" skip={role !== "admin"}>
+        <MuiThemeProvider theme={theme}>
+          <div className="App">
+            <Admin handleSignOut={handleSignOut} />
+          </div>
+        </MuiThemeProvider>
+      </Route>
+      <Route exact screen path="/signup">
+        <MuiThemeProvider theme={theme}>
+          <div className="App">
+            <SignUp handleSignIn={handleSignIn} />
+          </div>
+        </MuiThemeProvider>
+      </Route>
+      <Route exact screen path="/">
+        <MuiThemeProvider theme={theme}>
+          <div className="App">
+            <SignIn handleSignIn={handleSignIn} />
+          </div>
+        </MuiThemeProvider>
+      </Route>
+    </Navigation>
   );
 }
