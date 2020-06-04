@@ -1,8 +1,27 @@
 import React, { useState, useEffect } from "react";
-import { Button, Grid, Snackbar } from "@material-ui/core";
-import { Alert } from "@material-ui/lab";
+import {
+  AppBar,
+  Button,
+  Grid,
+  Dialog,
+  DialogTitle,
+  DialogActions,
+  Toolbar,
+  Typography
+} from "@material-ui/core";
+import { makeStyles } from "@material-ui/core/styles";
 import UserCard from "./UserCard";
 const axios = require("axios").default;
+
+const useStyles = makeStyles((theme) => ({
+  menuButton: {
+    marginRight: theme.spacing(2),
+  },
+  title: {
+    flexGrow: 1,
+  },
+}));
+
 
 (function () {
   const token = localStorage.getItem("token");
@@ -12,7 +31,8 @@ const axios = require("axios").default;
 
 export default function Admin(props) {
   const [users, setUsers] = useState([]);
-  const [startDeleteUser, setStartDeleteUser] = useState(false);
+  const [accountToDelete, setAccountToDelete] = useState("");
+  const classes = useStyles();
 
   const signOut = function () {
     props.handleSignOut();
@@ -40,51 +60,29 @@ export default function Admin(props) {
     };
   }, []);
 
-  async function deleteUser(email) {
+  async function doDelete() {
     try {
       let response = await axios.delete(
-        process.env.REACT_APP_API_URL + "/api/users/" + email
+        process.env.REACT_APP_API_URL + "/api/users/" + accountToDelete
       );
       if (response.status === 200) {
-        // remove from state
-        setUsers(users.filter((u) => u.email !== email));
+        setUsers((prev) => prev.filter((u) => u.email !== accountToDelete));
+        setAccountToDelete("");
       } else {
-        throw new Error(`Unable to delete: ${email}`);
+        throw new Error(`Unable to delete: ${accountToDelete}`);
       }
     } catch (e) {
       console.log(e);
+      setAccountToDelete(""); // TODO display an error message
     }
   }
 
-  function handleUndoDelete(email) {
-    setUsers(
-      users.map((u) => {
-        if (u.email === email) delete u.toBeDeleted;
-        return u;
-      })
-    );
+  function handleCancel() {
+    setAccountToDelete("");
   }
 
   function handleDelete(email) {
-    // if there is already an email stored, permanently delete them
-    finishDelete();
-
-    // turn on undo notification
-    setUsers(
-      users.map((u) => {
-        if (u.email === email) u.toBeDeleted = true;
-        return u;
-      })
-    );
-    setStartDeleteUser(true);
-  }
-
-  function finishDelete() {
-    setStartDeleteUser(false);
-    const prev = users.filter((u) => u.toBeDeleted)[0];
-    if (prev) {
-      deleteUser(prev.email);
-    }
+    setAccountToDelete(email);
   }
 
   const userCards = users
@@ -98,27 +96,35 @@ export default function Admin(props) {
 
   return (
     <>
-      <h2>Users</h2>
-      <Button onClick={signOut}>Sign Out</Button>
+      <AppBar position="static">
+        <Toolbar>
+          <Typography variant="h6" className={classes.title} >
+            Manage Accounts
+          </Typography>
+          <Button color="inherit" onClick={signOut}>Sign Out</Button>
+        </Toolbar>
+      </AppBar>
       <Grid container spacing={3}>
         {userCards}
       </Grid>
-      <Snackbar
-        open={startDeleteUser}
-        autoHideDuration={6000}
-        onClose={finishDelete}
+      <Dialog
+        open={accountToDelete !== ""}
+        onClose={handleCancel}
+        aria-labelledby="alert-dialog-title"
+        aria-describedby="alert-dialog-description"
       >
-        <Alert
-          severity="info"
-          action={
-            <Button color="inherit" size="small" onClick={handleUndoDelete}>
-              UNDO
-            </Button>
-          }
-        >
-          Account deleted.
-        </Alert>
-      </Snackbar>
+        <DialogTitle id="alert-dialog-title">
+          {`Delete the account?`}
+        </DialogTitle>
+        <DialogActions>
+          <Button onClick={handleCancel} color="primary">
+            No, cancel.
+          </Button>
+          <Button onClick={doDelete} color="primary" autoFocus>
+            Yes, delete.
+          </Button>
+        </DialogActions>
+      </Dialog>{" "}
     </>
   );
 }
