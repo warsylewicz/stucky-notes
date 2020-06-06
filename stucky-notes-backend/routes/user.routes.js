@@ -1,4 +1,4 @@
-const { authJwt } = require("../middlewares");
+const { auth } = require("../middlewares");
 const userController = require("../controllers/user.controller");
 
 module.exports = function (app) {
@@ -12,13 +12,13 @@ module.exports = function (app) {
 
   app.get(
     "/api/users",
-    [authJwt.verifyToken, authJwt.isAdmin],
+    [auth.verifyToken, auth.isAdmin],
     userController.findAll
   );
 
   app.delete(
     "/api/users/:email",
-    [authJwt.verifyToken, authJwt.isAdmin], // love this design, great abstraction
-    userController.delete
+    [auth.verifyToken, auth.isAdmin],
+    userController.deleteUser
   );
 };

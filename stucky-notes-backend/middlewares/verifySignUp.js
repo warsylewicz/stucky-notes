@@ -1,41 +1,27 @@
-const db = require("../models");
-const ROLES = db.ROLES;
-const User = db.user;
+const { userDB } = require("../db");
 
-checkValidEmail = (req, res, next) => {
-  User.findOne({
-    email: req.body.email,
-  }).exec((err, user) => {
-    if (err) {
-      res.status(500).send({ message: err });
-      return;
-    }
+const checkValidEmail = async (req, res, next) => {
+  const email = req.body.email.trim();
+  const re = /^\S+@\S+$/;
+  if (!re.test(email)) {
+    res.status(400).send({ message: "Failed! Invalid email address." });
+    return;
+  }
 
-    if (user) {
+  try {
+    const user = await userDB.getUser(email);
+    if (user != null) {
       res.status(400).send({ message: "Failed! Email is already in use." });
       return;
     }
-
-    next();
-  });
-};
-
-checkRoleExists = (req, res, next) => {
-  if (req.body.role) {
-    if (!ROLES.includes(req.body.role)) {
-      res.status(400).send({
-        message: `Failed! Role ${req.body.role} does not exist.`,
-      });
-      return;
-    }
+  } catch (err) {
+    if (process.env.DEBUG === "true") console.log(err);
+    res.status(500).send({ message: err });
+    return;
   }
-
   next();
 };
 
-const verifySignUp = {
+module.exports = {
   checkValidEmail,
-  checkRoleExists,
-};
-
-module.exports = verifySignUp;
+}

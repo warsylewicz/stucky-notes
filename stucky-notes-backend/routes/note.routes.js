@@ -1,4 +1,4 @@
-const { authJwt } = require("../middlewares");
+const { auth } = require("../middlewares");
 const noteController = require("../controllers/note.controller");
 
 module.exports = function (app) {
@@ -13,25 +13,25 @@ module.exports = function (app) {
 
   app.get(
     "/api/notes",
-    [authJwt.verifyToken],
+    [auth.verifyToken],
     noteController.findAll
   );
 
   app.post(
     "/api/notes",
-    [authJwt.verifyToken],
-    noteController.create
+    [auth.verifyToken],
+    noteController.insertNote
   );
 
   app.patch(
-      "/api/notes/:noteId",
-      [authJwt.verifyToken],
-      noteController.update
+      "/api/notes/:id",
+      [auth.verifyToken, auth.isNoteOwner],
+      noteController.updateNote
   )
 
   app.delete(
-    "/api/notes/:noteId",
-    [authJwt.verifyToken],
-    noteController.delete
+    "/api/notes/:id",
+    [auth.verifyToken, auth.isNoteOwner],
+    noteController.deleteNote
   );
 };

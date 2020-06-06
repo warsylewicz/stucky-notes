@@ -117,3 +117,23 @@ Add routing and page transitions.
 
 Replaced framer-motion with react-tiger-transition.  Implemented better page routing.
 
+---
+
+**Day 18: 2020-06-02**
+
+Sign up, protected routes, transitions are all done and working well together.
+
+---
+
+**Day 19: 2020-06-03**
+
+Completed the admin page.
+
+---
+
+**Day 20: 2020-06-04**
+
+Switching to PostreSQL.  Tried to switch to ES6 in Node.js - bad idea since I don't want to use Babel.
+
+
+Working on creating draggable notes.  

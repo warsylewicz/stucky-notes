@@ -1,81 +1,62 @@
-const db = require("../models");
-const { ObjectID } = require("mongodb");
-const User = db.user;
-const Role = db.role;
-const Note = db.note;
+const { noteDB } = require("../db");
 
-exports.findAll = (req, res) => {
-  const userId = req.userId;
-  Note.find({ owner: userId }, (err, notes) => {
-    if (err) {
-      res.status(500).send({ message: err });
-      return;
-    }
-
+const findAll = async (req, res) => {
+  try {
+    const notes = await noteDB.findAll(req.email);
     res.send(notes);
-  });
+  } catch (err) {
+    res.status(500).send({ message: err });
+  }
 };
 
-exports.create = (req, res) => {
-  const userId = req.userId;
-  const note = new Note({
-    _id: new ObjectID(),
-    contents: req.body.contents,
-    posX: req.body.posX,
-    posY: req.body.posY,
-    created: Date(),
-    modified: Date(),
-    owner: new ObjectID(req.userId),
-  });
-  note.save((err, savedNote) => {
-    if (err) {
-      res.status(500).send({ message: err });
-      return;
-    }
+const insertNote = async (req, res) => {  
+  try {
+    let note = {
+      contents: req.body.contents,
+      posX: req.body.posX,
+      posY: parseInt(req.body.posY),
+      created_date: new Date().toISOString(),
+      modified_date: new Date().toISOString(),
+      email: req.email
+    };
+  
+    const id = await noteDB.insertNote(note);
+    note.id = id;
 
-    res.send(savedNote);
-  });
+    res.send(note);
+  } catch (err) {
+    console.log(err.stack);
+    res.status(500).send({ message: err });
+  }
 };
 
-exports.update = (req, res) => {
-  const userId = req.userId;
-  const noteId = req.params.noteId;
-
-  let updateForNote = {
-    contents: req.body.contents,
-    posX: req.body.posX,
-    posY: req.body.posY,
-    modified: Date(),
-  };
-
-  Note.findOneAndUpdate(
-    { owner: userId, _id: noteId },
-    updateForNote,
-    { new: true, useFindAndModify: false },
-    (err, savedNote) => {
-      if (err) {
-        res.status(500).send({ message: err });
-        return;
-      }
-      if (!savedNote) {
-        res.status(404).send({ message: "Note not found." });
-        return;
-      }
-      res.send(savedNote);
-    }
-  );
+const updateNote = async (req, res) => {
+  try {
+    const note = await noteDB.updateNote(
+      req.params.id,
+      req.body.contents,
+      req.body.posX,
+      req.body.posY,
+      new Date().toISOString()
+    );
+    res.send(note);
+  } catch (err) {
+    res.status(500).send({ message: err });
+  }
 };
 
-exports.delete = (req, res) => {
-  const userId = req.userId;
-  const noteId = req.params.noteId;
-
-  Note.findOneAndDelete({ owner: userId, _id: noteId }, (err, note) => {
-    if (err || !note) {
-      res.status(404).send({ message: err });
-      return;
-    }
-
+const deleteNote = async (req, res) => {
+  try {
+    await noteDB.deleteNote(req.params.id);
     res.status(200).send();
-  });
+  } catch (err) {
+    res.status(500).send({ message: err });
+  }
+};
+
+module.exports = {
+  findAll,
+  insertNote,
+  updateNote,
+  deleteNote,
 };
