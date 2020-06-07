@@ -3,9 +3,6 @@ import {
   AppBar,
   Button,
   Container,
-  Dialog,
-  DialogTitle,
-  DialogActions,
   Toolbar,
   Typography
 } from '@material-ui/core'
@@ -13,24 +10,24 @@ import { makeStyles } from '@material-ui/core/styles'
 import Note from './Note'
 const axios = require('axios').default
 
-const useStyles = makeStyles((theme) => ({
+const useStyles = makeStyles(theme => ({
   menuButton: {
     marginRight: theme.spacing(2)
   },
   title: {
     flexGrow: 1
   }
-}));
+}))
 
-(function () {
-  const token = localStorage.getItem('token')
+;(function () {
+  const token = window.localStorage.getItem('token')
   if (token) axios.defaults.headers.common['x-access-token'] = token
   else axios.defaults.headers.common['x-access-token'] = null
 })()
 
 export default function Notes (props) {
   const [notes, setNotes] = useState([])
-  const [noteToDelete, setNoteToDelete] = useState('')
+  // const [noteToDelete, setNoteToDelete] = useState('')
   const classes = useStyles()
 
   const signOut = function () {
@@ -77,7 +74,7 @@ export default function Notes (props) {
   //   }
   // }
 
-  const noteComponents = notes.map((n) => <Note key={n.id} details={n} />)
+  const noteComponents = notes.map(n => <Note key={n.id} details={n} />)
 
   return (
     <>
@@ -86,12 +83,12 @@ export default function Notes (props) {
           <Typography variant='h6' className={classes.title}>
             Your Notes
           </Typography>
-          <Button color='inherit' onClick={signOut}>Sign Out</Button>
+          <Button color='inherit' onClick={signOut}>
+            Sign Out
+          </Button>
         </Toolbar>
       </AppBar>
-      <Container>
-        {noteComponents}
-      </Container>
+      <Container>{noteComponents}</Container>
     </>
   )
 }

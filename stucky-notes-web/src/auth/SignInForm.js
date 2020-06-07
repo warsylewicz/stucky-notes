@@ -40,7 +40,7 @@ export default function SignInForm (props) {
   const [email, setEmail] = useState('')
   const [password, setPassword] = useState('')
   const [invalidSignIn, setInvalidSignIn] = useState(false)
-  const [validSignIn, setValidSignIn] = useState(localStorage.getItem('role'))
+  const [validSignIn, setValidSignIn] = useState(window.localStorage.getItem('role'))
 
   const classes = useStyles()
 
@@ -55,10 +55,10 @@ export default function SignInForm (props) {
         }
       )
       if (response.data.accessToken !== null) {
-        localStorage.setItem('token', response.data.accessToken)
-        localStorage.setItem('email', response.data.email)
-        localStorage.setItem('role', response.data.role)
-        props.handleSignIn(response.data.role)
+        window.localStorage.setItem('token', response.data.accessToken)
+        window.localStorage.setItem('email', response.data.email)
+        window.localStorage.setItem('role', response.data.role)
+        props.onSignIn(response.data.role)
         setValidSignIn(response.data.role)
       } else {
         throw new Error('Invalid Sign In')

@@ -10,7 +10,6 @@ const findAll = async (req, res) => {
 }
 
 const deleteUser = async (req, res) => {
-  const email = req.params.email
   try {
     await userDB.deleteUser(req.params.email)
     res.status(200).end()

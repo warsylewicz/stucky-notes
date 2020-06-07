@@ -11,17 +11,9 @@ module.exports = function (app) {
     next()
   })
 
-  app.get(
-    '/api/notes',
-    [auth.verifyToken],
-    noteController.findAll
-  )
+  app.get('/api/notes', [auth.verifyToken], noteController.findAll)
 
-  app.post(
-    '/api/notes',
-    [auth.verifyToken],
-    noteController.insertNote
-  )
+  app.post('/api/notes', [auth.verifyToken], noteController.insertNote)
 
   app.patch(
     '/api/notes/:id',

@@ -40,16 +40,16 @@ scale({
 })
 
 export default function App (props) {
-  const [role, setRole] = useState(localStorage.getItem('role'))
+  const [role, setRole] = useState(window.localStorage.getItem('role'))
 
   function handleSignIn (newRole) {
     setRole(newRole)
   }
 
   function handleSignOut () {
-    localStorage.removeItem('token')
-    localStorage.removeItem('email')
-    localStorage.removeItem('role')
+    window.localStorage.removeItem('token')
+    window.localStorage.removeItem('email')
+    window.localStorage.removeItem('role')
     setRole('')
   }
 

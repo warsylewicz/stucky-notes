@@ -13,17 +13,17 @@ import { makeStyles } from '@material-ui/core/styles'
 import UserCard from './UserCard'
 const axios = require('axios').default
 
-const useStyles = makeStyles((theme) => ({
+const useStyles = makeStyles(theme => ({
   menuButton: {
     marginRight: theme.spacing(2)
   },
   title: {
     flexGrow: 1
   }
-}));
+}))
 
-(function () {
-  const token = localStorage.getItem('token')
+;(function () {
+  const token = window.localStorage.getItem('token')
   if (token) axios.defaults.headers.common['x-access-token'] = token
   else axios.defaults.headers.common['x-access-token'] = null
 })()
@@ -65,7 +65,7 @@ export default function Admin (props) {
         process.env.REACT_APP_API_URL + '/api/users/' + accountToDelete
       )
       if (response.status === 200) {
-        setUsers((prev) => prev.filter((u) => u.email !== accountToDelete))
+        setUsers(prev => prev.filter(u => u.email !== accountToDelete))
         setAccountToDelete('')
       } else {
         throw new Error(`Unable to delete: ${accountToDelete}`)
@@ -85,10 +85,10 @@ export default function Admin (props) {
   }
 
   const userCards = users
-    .filter((u) => !u.toBeDeleted)
+    .filter(u => !u.toBeDeleted)
     .sort((u1, u2) => new Date(u1.lastLogin) - new Date(u2.lastLogin))
-    .map((user) => (
-      <Grid item xs={12} md={6}>
+    .map(user => (
+      <Grid item xs={12} md={6} key={user.email}>
         <UserCard user={user} key={user.email} handleDelete={handleDelete} />
       </Grid>
     ))
@@ -100,7 +100,9 @@ export default function Admin (props) {
           <Typography variant='h6' className={classes.title}>
             Manage Accounts
           </Typography>
-          <Button color='inherit' onClick={signOut}>Sign Out</Button>
+          <Button color='inherit' onClick={signOut}>
+            Sign Out
+          </Button>
         </Toolbar>
       </AppBar>
       <Grid container spacing={3}>

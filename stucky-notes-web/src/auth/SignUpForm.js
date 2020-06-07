@@ -57,9 +57,9 @@ function SignUpForm (props) {
       )
       console.log(response)
       if (response.data.accessToken !== null) {
-        localStorage.setItem('token', response.data.accessToken)
-        localStorage.setItem('email', response.data.email)
-        localStorage.setItem('role', response.data.role)
+        window.localStorage.setItem('token', response.data.accessToken)
+        window.localStorage.setItem('email', response.data.email)
+        window.localStorage.setItem('role', response.data.role)
         props.handleSignIn(response.data.role)
         setValidSignUp(1)
       } else {

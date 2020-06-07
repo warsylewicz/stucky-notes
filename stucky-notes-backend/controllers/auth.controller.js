@@ -35,10 +35,7 @@ const signin = async (req, res) => {
       res.status(404).end()
       return
     }
-    const passwordIsValid = bcrypt.compareSync(
-      req.body.password,
-      user.password
-    )
+    const passwordIsValid = bcrypt.compareSync(req.body.password, user.password)
 
     if (!passwordIsValid) {
       res.status(401).send({

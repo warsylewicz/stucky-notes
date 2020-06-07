@@ -17,7 +17,7 @@ export default function SignIn (props) {
     <Container maxWidth='sm'>
       <Title />
       <Paper elevation={4} className={classes.paper} theme={props.theme}>
-        <SignInForm handleSignIn={props.handleSignIn} />
+        <SignInForm onSignIn={props.handleSignIn} />
       </Paper>
     </Container>
   )
