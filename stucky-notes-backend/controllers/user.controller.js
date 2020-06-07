@@ -1,25 +1,25 @@
-const { userDB } = require("../db");
+const { userDB } = require('../db')
 
 const findAll = async (req, res) => {
   try {
-    const users = await userDB.findAll();
-    res.send(users);
+    const users = await userDB.findAll()
+    res.send(users)
   } catch (err) {
-    res.status(500).send({ message: err });
+    res.status(500).send({ message: err })
   }
-};
+}
 
 const deleteUser = async (req, res) => {
-  const email = req.params.email;
+  const email = req.params.email
   try {
-    await userDB.deleteUser(req.params.email);
-    res.status(200).end();
+    await userDB.deleteUser(req.params.email)
+    res.status(200).end()
   } catch (err) {
-    res.status(500).send({ message: err });
+    res.status(500).send({ message: err })
   }
-};
+}
 
 module.exports = {
   findAll,
-  deleteUser,
-};
+  deleteUser
+}

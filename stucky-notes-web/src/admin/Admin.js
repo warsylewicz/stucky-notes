@@ -1,4 +1,4 @@
-import React, { useState, useEffect } from "react";
+import React, { useState, useEffect } from 'react'
 import {
   AppBar,
   Button,
@@ -8,81 +8,80 @@ import {
   DialogActions,
   Toolbar,
   Typography
-} from "@material-ui/core";
-import { makeStyles } from "@material-ui/core/styles";
-import UserCard from "./UserCard";
-const axios = require("axios").default;
+} from '@material-ui/core'
+import { makeStyles } from '@material-ui/core/styles'
+import UserCard from './UserCard'
+const axios = require('axios').default
 
 const useStyles = makeStyles((theme) => ({
   menuButton: {
-    marginRight: theme.spacing(2),
+    marginRight: theme.spacing(2)
   },
   title: {
-    flexGrow: 1,
-  },
+    flexGrow: 1
+  }
 }));
 
-
 (function () {
-  const token = localStorage.getItem("token");
-  if (token) axios.defaults.headers.common["x-access-token"] = token;
-  else axios.defaults.headers.common["x-access-token"] = null;
-})();
+  const token = localStorage.getItem('token')
+  if (token) axios.defaults.headers.common['x-access-token'] = token
+  else axios.defaults.headers.common['x-access-token'] = null
+})()
 
-export default function Admin(props) {
-  const [users, setUsers] = useState([]);
-  const [accountToDelete, setAccountToDelete] = useState("");
-  const classes = useStyles();
+export default function Admin (props) {
+  const [users, setUsers] = useState([])
+  const [accountToDelete, setAccountToDelete] = useState('')
+  const classes = useStyles()
 
   const signOut = function () {
-    props.handleSignOut();
-  };
+    props.handleSignOut()
+  }
 
   useEffect(() => {
-    let ignore = false;
+    let ignore = false
 
-    async function fetchData() {
+    async function fetchData () {
       try {
-        let response = await axios(
-          process.env.REACT_APP_API_URL + "/api/users"
-        );
+        const response = await axios(
+          process.env.REACT_APP_API_URL + '/api/users'
+        )
         if (response.status !== 200) {
-          throw new Error("Cannot get users");
+          throw new Error('Cannot get users')
         }
-        if (!ignore) setUsers(response.data);
+        if (!ignore) setUsers(response.data)
       } catch (e) {
-        console.log(e);
+        console.log(e)
       }
     }
-    fetchData();
+    fetchData()
     return () => {
-      ignore = true;
-    };
-  }, []);
+      ignore = true
+    }
+  }, [])
 
-  async function doDelete() {
+  async function doDelete () {
     try {
-      let response = await axios.delete(
-        process.env.REACT_APP_API_URL + "/api/users/" + accountToDelete
-      );
+      const response = await axios.delete(
+        process.env.REACT_APP_API_URL + '/api/users/' + accountToDelete
+      )
       if (response.status === 200) {
-        setUsers((prev) => prev.filter((u) => u.email !== accountToDelete));
-        setAccountToDelete("");
+        setUsers((prev) => prev.filter((u) => u.email !== accountToDelete))
+        setAccountToDelete('')
       } else {
-        throw new Error(`Unable to delete: ${accountToDelete}`);
+        throw new Error(`Unable to delete: ${accountToDelete}`)
       }
     } catch (e) {
-      console.log(e);
-      setAccountToDelete(""); // TODO display an error message
+      console.log(e)
+      setAccountToDelete('') // TODO display an error message
     }
   }
 
-  function handleCancel() {
-    setAccountToDelete("");
+  function handleCancel () {
+    setAccountToDelete('')
   }
 
-  function handleDelete(email) {
-    setAccountToDelete(email);
+  function handleDelete (email) {
+    setAccountToDelete(email)
   }
 
   const userCards = users
@@ -92,39 +91,39 @@ export default function Admin(props) {
       <Grid item xs={12} md={6}>
         <UserCard user={user} key={user.email} handleDelete={handleDelete} />
       </Grid>
-    ));
+    ))
 
   return (
     <>
-      <AppBar position="static">
+      <AppBar position='static'>
         <Toolbar>
-          <Typography variant="h6" className={classes.title} >
+          <Typography variant='h6' className={classes.title}>
             Manage Accounts
           </Typography>
-          <Button color="inherit" onClick={signOut}>Sign Out</Button>
+          <Button color='inherit' onClick={signOut}>Sign Out</Button>
         </Toolbar>
       </AppBar>
       <Grid container spacing={3}>
         {userCards}
       </Grid>
       <Dialog
-        open={accountToDelete !== ""}
+        open={accountToDelete !== ''}
         onClose={handleCancel}
-        aria-labelledby="alert-dialog-title"
-        aria-describedby="alert-dialog-description"
+        aria-labelledby='alert-dialog-title'
+        aria-describedby='alert-dialog-description'
       >
-        <DialogTitle id="alert-dialog-title">
-          {`Delete the account?`}
+        <DialogTitle id='alert-dialog-title'>
+          {'Delete the account?'}
         </DialogTitle>
         <DialogActions>
-          <Button onClick={handleCancel} color="primary">
+          <Button onClick={handleCancel} color='primary'>
             No, cancel.
           </Button>
-          <Button onClick={doDelete} color="primary" autoFocus>
+          <Button onClick={doDelete} color='primary' autoFocus>
             Yes, delete.
           </Button>
         </DialogActions>
-      </Dialog>{" "}
+      </Dialog>{' '}
     </>
-  );
+  )
 }

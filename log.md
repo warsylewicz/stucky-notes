@@ -135,5 +135,18 @@ Completed the admin page.
 
 Switching to PostreSQL.  Tried to switch to ES6 in Node.js - bad idea since I don't want to use Babel.
 
+---
+
+**Day 21: 2020-06-05
+
+Still rewriting back-end.  Created a new architecture since there is no more ORM.
+
+---
+
+**Day 22: 2020-06-05
+
+Finished back-end. Found the JavaScript standard on npm.  LOTS of cleanup to do.
+
+
 
 Working on creating draggable notes.  

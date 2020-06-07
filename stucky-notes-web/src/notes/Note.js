@@ -1,41 +1,44 @@
-import React, { useState } from "react";
-import Paper from "@material-ui/core/Paper";
-import { makeStyles } from "@material-ui/core/styles";
-import { DndProvider } from 'react-dnd'
+import React, { useState, useEffect } from 'react'
+import Paper from '@material-ui/core/Paper'
+import { makeStyles } from '@material-ui/core/styles'
+import { DndProvider, useDrop } from 'react-dnd'
 import { HTML5Backend } from 'react-dnd-html5-backend'
-import { useDrop } from 'react-dnd'
 
 const useStyles = makeStyles((theme) => ({
   paper: {
+    position: 'absolute',
     marginTop: theme.spacing(4),
-    width: "calc(15px + 5%)",
-    height: "calc(15px + 5%)",
-    fontSize: "calc(12px + 10%)",
-    margin: "0",
-    paddingTop: "20%",
-    paddingBottom: "0%",
-    fontFamily: "papyrus",
-    cursor: "default",
-    backgroundColor: theme.palette.secondary.light,
-  },
-}));
+    width: '50px',
+    height: '50px',
+    fontSize: 'calc(12px)',
+    margin: '0',
+    padding: '0',
+    fontFamily: 'papyrus',
+    cursor: 'move',
+    backgroundColor: theme.palette.secondary.light
+  }
+}))
 
-export default function Note(props) {
-  const classes = useStyles();
+export default function Note (props) {
+  const classes = useStyles()
+
   return (
     <DndProvider backend={HTML5Backend}>
 
-    <Paper
-      elevation={3}
-      square={true}
-      className={classes.paper}
-      style={{
-        transform:
-          "rotate(5deg)",
-      }}
-    >
-      This is a note!
-    </Paper>
+      <Paper
+        elevation={3}
+        square
+        className={classes.paper}
+        style={{
+          transform:
+          'rotate(' + (props.details.contents.charCodeAt(0) % 15 - 8) + 'deg)',
+          // "rotate(5deg)",
+          top: props.details.posy + 'px',
+          left: (props.details.posx + 800) + 'px'
+        }}
+      >
+        {props.details.contents.substr(0, 20)}
+      </Paper>
     </DndProvider>
-  );
+  )
 }

@@ -1,23 +1,23 @@
-import React from "react";
-import { makeStyles } from "@material-ui/core/styles";
-import Card from "@material-ui/core/Card";
-import CardHeader from "@material-ui/core/CardHeader";
-import Avatar from "@material-ui/core/Avatar";
-import IconButton from "@material-ui/core/IconButton";
-import DeleteIcon from "@material-ui/icons/Delete";
+import React from 'react'
+import { makeStyles } from '@material-ui/core/styles'
+import Card from '@material-ui/core/Card'
+import CardHeader from '@material-ui/core/CardHeader'
+import Avatar from '@material-ui/core/Avatar'
+import IconButton from '@material-ui/core/IconButton'
+import DeleteIcon from '@material-ui/icons/Delete'
 
 const useStyles = makeStyles((theme) => ({
   root: {
 
   },
   avatar: {
-    backgroundColor: theme.palette.primary.dark,
-  },
-}));
+    backgroundColor: theme.palette.primary.dark
+  }
+}))
 
-export default function UserCard(props) {
-  const classes = useStyles();
-  
+export default function UserCard (props) {
+  const classes = useStyles()
+
   return (
     <Card className={classes.root}>
       <CardHeader
@@ -27,13 +27,13 @@ export default function UserCard(props) {
           </Avatar>
         }
         action={
-          <IconButton aria-label="settings" onClick={() => props.handleDelete(props.user.email)}>
+          <IconButton aria-label='settings' onClick={() => props.handleDelete(props.user.email)}>
             <DeleteIcon />
           </IconButton>
         }
         title={props.user.email}
-        subheader={"Last signed in: " + props.user.lastLogin}
+        subheader={'Last signed in: ' + props.user.lastLogin}
       />
     </Card>
-  );
+  )
 }
