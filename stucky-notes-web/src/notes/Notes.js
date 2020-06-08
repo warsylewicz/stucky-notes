@@ -3,6 +3,7 @@ import {
   AppBar,
   Button,
   Container,
+  Dialog,
   Fab,
   Toolbar,
   Typography
@@ -33,6 +34,7 @@ const useStyles = makeStyles(theme => ({
 
 export default function Notes (props) {
   const [notes, setNotes] = useState([])
+  const [showEditNote, setShowEditNote] = useState(false)
   const classes = useStyles()
 
   const signOut = function () {
@@ -62,15 +64,19 @@ export default function Notes (props) {
   }, [])
 
   const noteComponents = notes.map(n => (
-    <NoteIcon key={n.id} details={n} onUpdatePosition={updatePosition} />
+    <NoteIcon key={n.id} details={n} onUpdatePosition={updateNote} onClick={n => showNote}/>
   ))
+
+  function showNote(n) {
+
+  }
 
   async function addNote () {
     try {
       const response = await axios.post(
         process.env.REACT_APP_API_URL + '/api/notes',
         {
-          contents: 'New note created ' + new Date(),
+          contents: 'New note! Move it around! Tap to edit!',
           posx: Math.floor(Math.random() * 100),
           posy: Math.floor(Math.random() * 100)
         }
@@ -82,11 +88,12 @@ export default function Notes (props) {
     }
   }
 
-  async function updatePosition (id, x, y) {
+  async function updateNote (id, x, y, contents) {
     let notesCopy = notes.map(n => {
       if (n.id === id) {
         n.posx = x
         n.posy = y
+        if (contents) n.contents = contents
         return n
       } else {
         return n
@@ -131,6 +138,13 @@ export default function Notes (props) {
         <AddIcon />
       </Fab>
       <Container className={classes.container}>{noteComponents}</Container>
+      <Dialog
+        onClose={updateNote}
+        aria-labelledby='customized-dialog-title'
+        open={showEditNote}
+      >
+        
+      </Dialog>
     </>
   )
 }
