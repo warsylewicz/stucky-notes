@@ -1,13 +1,20 @@
 import React from 'react'
-import Paper from '@material-ui/core/Paper'
+import {
+  Card,
+  CardHeader,
+  CardContent,
+  IconButton,
+  TextField
+} from '@material-ui/core'
 import { makeStyles } from '@material-ui/core/styles'
-import DeleteIcon from "@material-ui/icons/Delete"
+import DeleteIcon from '@material-ui/icons/Delete'
+import CloseIcon from '@material-ui/icons/Close'
 
 const useStyles = makeStyles(theme => ({
-  paper: {
+  card: {
     marginTop: theme.spacing(4),
-    width: '80%',
-    height: '80%',
+    width: '100%',
+    height: '100vh',
     fontSize: 'calc(12px)',
     margin: '0',
     padding: '0',
@@ -20,16 +27,28 @@ export default function Note (props) {
   const classes = useStyles()
 
   return (
-    <Paper
-      elevation={3}
-      square
-      className={classes.paper}
-      style={{
-        transform:
-          'rotate(' + ((props.details.contents.charCodeAt(0) % 15) - 8) + 'deg)'
-      }}
-    >
-      {props.details.contents}
-    </Paper>
+    <Card className={classes.card}>
+      <CardHeader
+        style={{ height: '0' }}
+        action={<CloseIcon onClick={props.onClose} />}
+      />
+      <CardContent>
+        <TextField
+          id='standard-multiline-static'
+          label='Multiline'
+          multiline
+          rows={4}
+          value={props.details.contents}
+          onChange={e => props.onChange(e.target.value)}
+        />
+      </CardContent>
+      <IconButton
+        color='primary'
+        aria-label='delete note'
+        onClick={props.deleteNote}
+      >
+        <DeleteIcon />
+      </IconButton>
+    </Card>
   )
 }

@@ -11,6 +11,7 @@ import {
 import AddIcon from '@material-ui/icons/Add'
 import { makeStyles } from '@material-ui/core/styles'
 import NoteIcon from './NoteIcon'
+import Note from './Note'
 const axios = require('axios').default
 
 const useStyles = makeStyles(theme => ({
@@ -34,6 +35,7 @@ const useStyles = makeStyles(theme => ({
 
 export default function Notes (props) {
   const [notes, setNotes] = useState([])
+  const [editNote, setEditNote] = useState({})
   const [showEditNote, setShowEditNote] = useState(false)
   const classes = useStyles()
 
@@ -64,11 +66,17 @@ export default function Notes (props) {
   }, [])
 
   const noteComponents = notes.map(n => (
-    <NoteIcon key={n.id} details={n} onUpdatePosition={updateNote} onClick={n => showNote}/>
+    <NoteIcon
+      key={n.id}
+      details={n}
+      onUpdatePosition={updateNote}
+      onClick={() => handleClick(n.id)}
+    />
   ))
 
-  function showNote(n) {
-
+  function handleClick (id) {
+    setEditNote(notes.filter(n => n.id === id)[0])
+    setShowEditNote(true)
   }
 
   async function addNote () {
@@ -88,6 +96,40 @@ export default function Notes (props) {
     }
   }
 
+  function handleNoteContentsChange (contents) {
+    let newEditNote = JSON.parse(JSON.stringify(editNote))
+    newEditNote.contents = contents
+    setEditNote(newEditNote)
+  }
+
+  async function deleteNote () {
+    alert('delete note')
+    return
+
+    
+    // try {
+    //   const response = await axios.patch(
+    //     process.env.REACT_APP_API_URL + '/api/notes/' + id,
+    //     {
+    //       contents: updatedNote.contents,
+    //       posx: updatedNote.posx,
+    //       posy: updatedNote.posy
+    //     }
+    //   )
+    //   if (response.status !== 200) throw new Error(response.status)
+    // } catch (err) {
+    //   console.log("Couldn't update note with id " + id + '. ' + err)
+    // }
+
+    // setShowEditNote(false)
+  }
+
+  // save the edit note to the array and to the server
+  function handleNoteContentsSave () {
+    updateNote (editNote.id, editNote.posx, editNote.posy, editNote.contents)
+    setShowEditNote(false)
+  }
+
   async function updateNote (id, x, y, contents) {
     let notesCopy = notes.map(n => {
       if (n.id === id) {
@@ -100,7 +142,6 @@ export default function Notes (props) {
       }
     })
     const updatedNote = notesCopy.filter(n => n.id === id)[0]
-    console.log(updatedNote)
     if (!updatedNote) {
       console.log("Couldn't find note with id " + id)
       return
@@ -127,7 +168,7 @@ export default function Notes (props) {
       <AppBar position='static'>
         <Toolbar>
           <Typography variant='h6' className={classes.title}>
-            Your Notes
+            Your Notes - {window.localStorage.getItem("email")}
           </Typography>
           <Button color='inherit' onClick={signOut}>
             Sign Out
@@ -139,11 +180,15 @@ export default function Notes (props) {
       </Fab>
       <Container className={classes.container}>{noteComponents}</Container>
       <Dialog
-        onClose={updateNote}
-        aria-labelledby='customized-dialog-title'
+        onClose={handleNoteContentsSave}
+        aria-labelledby='edit note'
         open={showEditNote}
       >
-        
+        <Note
+          details={editNote}
+          onChange={handleNoteContentsChange}
+          onDelete={deleteNote}
+        />
       </Dialog>
     </>
   )

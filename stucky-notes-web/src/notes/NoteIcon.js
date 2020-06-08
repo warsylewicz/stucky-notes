@@ -1,10 +1,8 @@
-import React, { useState } from 'react'
+import React from 'react'
 import {
   Card,
   CardHeader,
   CardContent,
-  Dialog,
-  Typography
 } from '@material-ui/core'
 import Draggable from 'react-draggable'
 import { makeStyles } from '@material-ui/core/styles'
@@ -26,20 +24,16 @@ const useStyles = makeStyles(theme => ({
 
 export default function NoteIcon (props) {
   const classes = useStyles()
-  const [open, setOpen] = useState(false)
 
   function handleDragStop (e, position) {
-    console.log(position)
     props.onUpdatePosition(props.details.id, position.x, position.y)
   }
 
-  function handleClick (e) {
-    setOpen(true)
-  }
-
-  function handleClose () {
-    props.onUpdatePosition(props.details.id)
-    setOpen(false)
+  function handleClick() {
+    const card = document.getElementById("id" + props.details.id)
+    let zindex = card.style.zIndex || 1
+    card.style.zIndex = zindex + 1
+    props.onClick()
   }
 
   return (
@@ -51,14 +45,17 @@ export default function NoteIcon (props) {
         onStop={handleDragStop}
       >
         <Card
+          id={"id" + props.details.id}
           className={classes.card}
-          style={{
-            transform: 'rotate(10deg)' // +
-            //((props.details.contents.charCodeAt(0) % 15) - 8) +
-            //'deg)',
-            //top: props.details.posy + 'px',
-            //left: props.details.posx + 'px'
-          }}
+          style={
+            {
+              // transform: 'rotate(10deg)' // +
+              //((props.details.contents.charCodeAt(0) % 15) - 8) +
+              //'deg)',
+              //top: props.details.posy + 'px',
+              //left: props.details.posx + 'px'
+            }
+          }
         >
           <CardHeader
             style={{ height: '0' }}
@@ -72,31 +69,7 @@ export default function NoteIcon (props) {
             {props.details.contents.substr(0, 50)}...
           </CardContent>
         </Card>
-        {/* <Paper
-          elevation={3}
-          square
-          className={classes.paper}
-          style={{
-            transform:
-              'rotate(' +
-              ((props.details.contents.charCodeAt(0) % 15) - 8) +
-              'deg)',
-            top: props.details.posy + 'px',
-            left: props.details.posx + 800 + 'px'
-          }}
-          onClick={handleClick}
-        >
-          {props.details.contents.substr(0, 20)}
-          <strong><DragIndicator /></strong>
-        </Paper> */}
       </Draggable>
-      <Dialog
-        onClose={handleClose}
-        aria-labelledby='customized-dialog-title'
-        open={open}
-      >
-        This is a dialog
-      </Dialog>
     </>
   )
 }
