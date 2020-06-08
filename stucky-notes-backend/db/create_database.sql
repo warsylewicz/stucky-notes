@@ -11,8 +11,8 @@ DROP TABLE roles;
 CREATE TABLE public.notes (
     id integer NOT NULL,
     contents text NOT NULL,
-    posX integer NOT NULL,
-    posY integer NOT NULL,
+    posx integer NOT NULL,
+    posy integer NOT NULL,
     created_date timestamp NOT NULL,
     modified_date timestamp NOT NULL,
     user_id integer NOT NULL

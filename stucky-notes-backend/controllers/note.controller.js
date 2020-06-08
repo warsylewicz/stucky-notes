@@ -13,8 +13,8 @@ const insertNote = async (req, res) => {
   try {
     const note = {
       contents: req.body.contents,
-      posX: req.body.posX,
-      posY: parseInt(req.body.posY),
+      posx: req.body.posx,
+      posy: req.body.posy,
       created_date: new Date().toISOString(),
       modified_date: new Date().toISOString(),
       email: req.email
@@ -35,8 +35,8 @@ const updateNote = async (req, res) => {
     const note = await noteDB.updateNote(
       req.params.id,
       req.body.contents,
-      req.body.posX,
-      req.body.posY,
+      req.body.posx,
+      req.body.posy,
       new Date().toISOString()
     )
     res.send(note)

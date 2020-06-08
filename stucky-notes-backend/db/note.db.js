@@ -2,7 +2,7 @@ const db = require('../db/utilities')
 
 const findAll = async email => {
   const res = await db.query(
-    'SELECT notes.id, notes.contents, notes.posX, notes.posY, notes.created_date, notes.modified_date ' +
+    'SELECT notes.id, notes.contents, notes.posx, notes.posy, notes.created_date, notes.modified_date ' +
       'FROM notes, users WHERE notes.user_id = users.id AND users.email=$1',
     [email]
   )
@@ -13,7 +13,7 @@ const findAll = async email => {
 const getNote = async id => {
   console.log(id)
   const res = await db.query(
-    'SELECT id, contents, posX, posY, created_date, modified_date, user_id ' +
+    'SELECT id, contents, posx, posy, created_date, modified_date, user_id ' +
       'FROM notes WHERE id=$1',
     [id]
   )
@@ -26,12 +26,12 @@ const insertNote = async note => {
   const userId = res.rows[0].id
 
   res = await db.query(
-    'INSERT INTO notes (contents, posX, posY, created_date, modified_date, user_id) ' +
+    'INSERT INTO notes (contents, posx, posy, created_date, modified_date, user_id) ' +
       'VALUES ($1, $2, $3, $4, $5, $6) RETURNING id',
     [
       note.contents,
-      note.posX,
-      note.posY,
+      note.posx,
+      note.posy,
       note.created_date,
       note.modified_date,
       userId
@@ -49,7 +49,7 @@ const deleteNote = async id => {
 
 const updateNote = async (id, contents, posX, posY, modifiedDate) => {
   const res = await db.query(
-    'UPDATE notes SET contents=$2, posX=$3, posY=$4, modified_date=$5 ' +
+    'UPDATE notes SET contents=$2, posx=$3, posy=$4, modified_date=$5 ' +
       'WHERE id=$1',
     [id, contents, posX, posY, modifiedDate]
   )
