@@ -32,7 +32,7 @@ export default function UserCard (props) {
           </IconButton>
         }
         title={props.user.email}
-        subheader={'Last signed in: ' + props.user.lastLogin}
+        subheader={`Signed in count: ${props.user.signed_in_count} | Last signed in: ${props.user.last_signed_in}`}
       />
     </Card>
   )

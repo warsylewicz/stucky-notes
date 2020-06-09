@@ -30,7 +30,15 @@ export default function Note (props) {
     <Card className={classes.card}>
       <CardHeader
         style={{ height: '0' }}
-        action={<CloseIcon onClick={props.onClose} />}
+        action={
+          <IconButton
+            color='primary'
+            aria-label='close note'
+            onClick={props.onClose}
+          >
+            <CloseIcon />
+          </IconButton>
+        }
       />
       <CardContent>
         <TextField

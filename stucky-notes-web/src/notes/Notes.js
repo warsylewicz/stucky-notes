@@ -65,14 +65,6 @@ export default function Notes (props) {
     }
   }, [])
 
-  const noteComponents = notes.map(n => (
-    <NoteIcon
-      key={n.id}
-      details={n}
-      onUpdatePosition={updateNote}
-      onClick={() => handleClick(n.id)}
-    />
-  ))
 
   function handleClick (id) {
     setEditNote(notes.filter(n => n.id === id)[0])
@@ -156,6 +148,15 @@ export default function Notes (props) {
     }
   }
 
+  const noteComponents = notes.map(n => (
+    <NoteIcon
+      key={n.id}
+      details={n}
+      onUpdatePosition={updateNote}
+      onClick={() => handleClick(n.id)}
+    />
+  ))
+
   return (
     <>
       <AppBar position='static'>
@@ -181,6 +182,7 @@ export default function Notes (props) {
           details={editNote}
           onChange={handleNoteContentsChange}
           onDelete={deleteNote}
+          onClose={handleNoteContentsSave}
         />
       </Dialog>
     </>

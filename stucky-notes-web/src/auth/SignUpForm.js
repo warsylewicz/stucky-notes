@@ -60,7 +60,6 @@ function SignUpForm (props) {
         window.localStorage.setItem('token', response.data.accessToken)
         window.localStorage.setItem('email', response.data.email)
         window.localStorage.setItem('role', response.data.role)
-        props.handleSignIn(response.data.role)
         setValidSignUp(1)
       } else {
         throw new Error('Invalid Login')
