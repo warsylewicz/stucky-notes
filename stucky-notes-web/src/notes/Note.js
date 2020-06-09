@@ -45,7 +45,7 @@ export default function Note (props) {
       <IconButton
         color='primary'
         aria-label='delete note'
-        onClick={props.deleteNote}
+        onClick={props.onDelete}
       >
         <DeleteIcon />
       </IconButton>

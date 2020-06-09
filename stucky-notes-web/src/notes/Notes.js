@@ -102,31 +102,24 @@ export default function Notes (props) {
     setEditNote(newEditNote)
   }
 
+  // delete the note that is currently being edited
   async function deleteNote () {
-    alert('delete note')
-    return
+    try {
+      const response = await axios.delete(
+        process.env.REACT_APP_API_URL + '/api/notes/' + editNote.id
+      )
+      if (response.status !== 200) throw new Error(response.status)
+    } catch (err) {
+      console.log("Couldn't delete note with id " + editNote.id + '. ' + err)
+    }
 
-    
-    // try {
-    //   const response = await axios.patch(
-    //     process.env.REACT_APP_API_URL + '/api/notes/' + id,
-    //     {
-    //       contents: updatedNote.contents,
-    //       posx: updatedNote.posx,
-    //       posy: updatedNote.posy
-    //     }
-    //   )
-    //   if (response.status !== 200) throw new Error(response.status)
-    // } catch (err) {
-    //   console.log("Couldn't update note with id " + id + '. ' + err)
-    // }
-
-    // setShowEditNote(false)
+    setNotes(prev => prev.filter(n => n.id !== editNote.id))
+    setShowEditNote(false)
   }
 
   // save the edit note to the array and to the server
   function handleNoteContentsSave () {
-    updateNote (editNote.id, editNote.posx, editNote.posy, editNote.contents)
+    updateNote(editNote.id, editNote.posx, editNote.posy, editNote.contents)
     setShowEditNote(false)
   }
 
@@ -168,7 +161,7 @@ export default function Notes (props) {
       <AppBar position='static'>
         <Toolbar>
           <Typography variant='h6' className={classes.title}>
-            Your Notes - {window.localStorage.getItem("email")}
+            Your Notes - {window.localStorage.getItem('email')}
           </Typography>
           <Button color='inherit' onClick={signOut}>
             Sign Out
