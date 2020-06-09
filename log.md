@@ -163,3 +163,7 @@ Big day!  Finished draggable notes and adding notes.
 
 **Day 25: 2020-06-08**
 
+Got edit note working well.  Consolidated GitHub accounts to @awarsylewicz
+
+---
+
