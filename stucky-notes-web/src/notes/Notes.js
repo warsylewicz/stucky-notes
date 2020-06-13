@@ -22,8 +22,7 @@ const useStyles = makeStyles(theme => ({
     flexGrow: 1
   },
   container: {
-    width: '100vw',
-    height: '90vh'
+    height: '100vh'
   }
 }))
 
@@ -183,6 +182,7 @@ export default function Notes (props) {
           onChange={handleNoteContentsChange}
           onDelete={deleteNote}
           onClose={handleNoteContentsSave}
+          
         />
       </Dialog>
     </>

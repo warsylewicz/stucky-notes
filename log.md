@@ -167,3 +167,12 @@ Got edit note working well.  Consolidated GitHub accounts to @awarsylewicz
 
 ---
 
+**Day 26: 2020-06-09**
+
+UI improvements.  Learning about Docker.
+
+---
+
+**Day 27: 2020-06-10**
+
+Want to use Docker but it requires Hyper-v.  Converting all my VirtualBox VMs to Hyper-v...

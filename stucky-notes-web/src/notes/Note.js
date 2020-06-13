@@ -14,11 +14,8 @@ const useStyles = makeStyles(theme => ({
   card: {
     marginTop: theme.spacing(4),
     width: '100%',
-    height: '100vh',
-    fontSize: 'calc(12px)',
-    margin: '0',
-    padding: '0',
-    fontFamily: 'papyrus',
+    height: '100%',
+    fontSize: '12px',
     backgroundColor: theme.palette.secondary.light
   }
 }))
@@ -43,9 +40,9 @@ export default function Note (props) {
       <CardContent>
         <TextField
           id='standard-multiline-static'
-          label='Multiline'
+          label='Note'
+          style={{fontFamily: 'papyrus'}}
           multiline
-          rows={4}
           value={props.details.contents}
           onChange={e => props.onChange(e.target.value)}
         />
